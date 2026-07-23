@@ -58,7 +58,7 @@ def iban_valid(value: str) -> bool:
     return int(converted) % 97 == 1
 
 # RFC 2606 / RFC 6761 reserve these; they can never resolve to a real mailbox.
-RESERVED_TLDS = (".invalid", ".test", ".example", ".localhost")
+RESERVED_TLDS = (".invalid", ".test", ".localhost")
 
 
 def email_valid(value: str) -> bool:
