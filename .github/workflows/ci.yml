@@ -16,5 +16,8 @@ jobs:
         run: pytest tests/test_no_egress.py -v
       - name: unit tests
         run: pytest -q
+      # Layer 1 only: CI does not install spaCy or its ~600MB model. The
+      # scorecard here is a smoke test that the eval harness still runs, not
+      # a measure of full detector quality.
       - name: detector scorecard
-        run: python eval/score.py
+        run: python eval/score.py --no-ner
