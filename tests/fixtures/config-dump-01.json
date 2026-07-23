@@ -3,6 +3,16 @@
   "text": "# staging.env - DO NOT COMMIT\nDATABASE_URL=postgres://svc_app:hunter2@10.0.4.17:5432/appdb\nREDIS_HOST=10.0.4.22\nSMTP_HOST=smtp.mailgun.example\nSMTP_USER=postmaster@mg.northwind.example\nADMIN_CONTACT=ops@northwind.example\nONCALL_PHONE=415-555-0111\nALLOWED_ORIGINS=https://app.northwind.example\nSENTRY_DSN=https://abc123@o4507.ingest.sentry.example/1\nPUBLIC_EGRESS_IP=203.0.113.44\nMAX_UPLOAD_MB=4111\n",
   "spans": [
     {
+      "start": 70,
+      "end": 79,
+      "label": "IPV4"
+    },
+    {
+      "start": 102,
+      "end": 111,
+      "label": "IPV4"
+    },
+    {
       "start": 153,
       "end": 184,
       "label": "EMAIL"
