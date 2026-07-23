@@ -1,0 +1,12 @@
+Ticket #48210 - password reset failing
+
+Reporter: Alice Chen
+Email: {{EMAIL:alice.chen@northwind.example}}
+Callback: {{PHONE_US:415-555-0142}}
+
+Customer says she cannot log in from her home IP {{IPV4:73.140.22.9}}.
+She confirmed the last four of her SSN as 1234 (full value on file:
+{{SSN:078-05-1120}}). Refund was issued to card {{CREDIT_CARD:4111 1111 1111 1111}}.
+
+Notes: internal ticket ref 000-12-3456 is not an SSN, it is our legacy ID
+format. Order total was 4111 dollars. Build server 999.1.1.1 is not an address.

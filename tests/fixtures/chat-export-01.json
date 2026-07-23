@@ -1,0 +1,31 @@
+{
+  "id": "chat-export-01",
+  "text": "[09:12] dev-oncall: prod db is refusing connections from 10.0.4.17\n[09:13] sam: that's the bastion, expected. try 192.168.31.7\n[09:15] dev-oncall: ok. paging the vendor at support@acme-vendor.example\n[09:16] sam: their escalation line is (628) 555-0199\n[09:21] dev-oncall: vendor wants the invoice IBAN, it's GB82WEST12345698765432\n[09:22] sam: careful, don't paste that in the shared channel\n[09:24] dev-oncall: too late lol. also my desk extension is 4021 if you need me\n",
+  "spans": [
+    {
+      "start": 57,
+      "end": 66,
+      "label": "IPV4"
+    },
+    {
+      "start": 114,
+      "end": 126,
+      "label": "IPV4"
+    },
+    {
+      "start": 172,
+      "end": 199,
+      "label": "EMAIL"
+    },
+    {
+      "start": 238,
+      "end": 252,
+      "label": "PHONE_US"
+    },
+    {
+      "start": 309,
+      "end": 331,
+      "label": "IBAN"
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+[09:12] dev-oncall: prod db is refusing connections from {{IPV4:10.0.4.17}}
+[09:13] sam: that's the bastion, expected. try {{IPV4:192.168.31.7}}
+[09:15] dev-oncall: ok. paging the vendor at {{EMAIL:support@acme-vendor.example}}
+[09:16] sam: their escalation line is {{PHONE_US:(628) 555-0199}}
+[09:21] dev-oncall: vendor wants the invoice IBAN, it's {{IBAN:GB82WEST12345698765432}}
+[09:22] sam: careful, don't paste that in the shared channel
+[09:24] dev-oncall: too late lol. also my desk extension is 4021 if you need me
