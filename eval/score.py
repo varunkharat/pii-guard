@@ -27,6 +27,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from piiguard.pipeline import Pipeline  # noqa: E402
+from piiguard.detectors import RegexDetector  # noqa: E402
+from piiguard.detectors.ner import NerDetector  # noqa: E402
 
 FIXTURES = Path(__file__).resolve().parents[1] / "tests" / "fixtures"
 
@@ -62,7 +64,7 @@ def main() -> int:
     ap.add_argument("--partial", action="store_true")
     args = ap.parse_args()
 
-    pipeline = Pipeline()
+    pipeline = Pipeline(detectors=[RegexDetector(), NerDetector()])
     counts: dict[str, dict[str, int]] = defaultdict(
         lambda: {"tp": 0, "fp": 0, "fn": 0}
     )
