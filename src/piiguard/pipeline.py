@@ -9,7 +9,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from .detectors import RegexDetector
-from .merge import merge_spans
+from .merge import join_adjacent, merge_spans
 from .policy import Policy, PolicyEngine
 from .types import Span
 from .verify import verify
@@ -42,7 +42,7 @@ class Pipeline:
         found: list[Span] = []
         for detector in self.detectors:
             found.extend(detector.detect(text))
-        return merge_spans(found)
+        return join_adjacent(text, merge_spans(found))
 
     def redact(self, text: str, *, strict: bool = True) -> Result:
         spans = self.scan(text)
