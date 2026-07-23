@@ -13,7 +13,7 @@ dependencies = []
 
 [project.optional-dependencies]
 # Layer 2. Installed explicitly so the base tool stays dependency-free.
-ner = ["presidio-analyzer>=2.2", "spacy>=3.7"]
+ner = ["spacy>=3.7"]
 # Layer 3. Optional local LLM pass via Ollama over a unix/loopback socket.
 llm = ["httpx>=0.27"]
 dev = ["pytest>=8.0", "ruff>=0.5"]

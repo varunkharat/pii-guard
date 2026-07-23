@@ -1,6 +1,6 @@
 Ticket #48210 - password reset failing
 
-Reporter: Alice Chen
+Reporter: {{PERSON:Alice Chen}}
 Email: {{EMAIL:alice.chen@northwind.example}}
 Callback: {{PHONE_US:415-555-0142}}
 

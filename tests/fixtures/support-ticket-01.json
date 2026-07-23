@@ -3,6 +3,11 @@
   "text": "Ticket #48210 - password reset failing\n\nReporter: Alice Chen\nEmail: alice.chen@northwind.example\nCallback: 415-555-0142\n\nCustomer says she cannot log in from her home IP 73.140.22.9.\nShe confirmed the last four of her SSN as 1234 (full value on file:\n078-05-1120). Refund was issued to card 4111 1111 1111 1111.\n\nNotes: internal ticket ref 000-12-3456 is not an SSN, it is our legacy ID\nformat. Order total was 4111 dollars. Build server 999.1.1.1 is not an address.\n",
   "spans": [
     {
+      "start": 50,
+      "end": 60,
+      "label": "PERSON"
+    },
+    {
       "start": 68,
       "end": 96,
       "label": "EMAIL"
