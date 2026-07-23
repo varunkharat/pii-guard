@@ -1,0 +1,71 @@
+{
+  "id": "csv-export-01",
+  "text": "id,name,email,phone,ip_last_seen,notes\n1,Alice Chen,alice.chen@northwind.example,4155550142,73.140.22.9,vip\n2,Yuki Tanaka,y.tanaka@coastal.example,510-555-0166,198.51.100.77,\n3,Priya Raghavan,praghavan@webmail.example,6695550128,,churn risk\n4,Test Account,noreply@example.invalid,0000000000,255.255.255.255,synthetic row\n5,Marcus Delgado,m.delgado@fastmail.example,,,order total 4111\n",
+  "spans": [
+    {
+      "start": 41,
+      "end": 51,
+      "label": "PERSON"
+    },
+    {
+      "start": 52,
+      "end": 80,
+      "label": "EMAIL"
+    },
+    {
+      "start": 81,
+      "end": 91,
+      "label": "PHONE_US"
+    },
+    {
+      "start": 92,
+      "end": 103,
+      "label": "IPV4"
+    },
+    {
+      "start": 110,
+      "end": 121,
+      "label": "PERSON"
+    },
+    {
+      "start": 122,
+      "end": 146,
+      "label": "EMAIL"
+    },
+    {
+      "start": 147,
+      "end": 159,
+      "label": "PHONE_US"
+    },
+    {
+      "start": 160,
+      "end": 173,
+      "label": "IPV4"
+    },
+    {
+      "start": 177,
+      "end": 191,
+      "label": "PERSON"
+    },
+    {
+      "start": 192,
+      "end": 217,
+      "label": "EMAIL"
+    },
+    {
+      "start": 218,
+      "end": 228,
+      "label": "PHONE_US"
+    },
+    {
+      "start": 323,
+      "end": 337,
+      "label": "PERSON"
+    },
+    {
+      "start": 338,
+      "end": 364,
+      "label": "EMAIL"
+    }
+  ]
+}

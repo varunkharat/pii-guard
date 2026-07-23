@@ -1,0 +1,41 @@
+{
+  "id": "invoice-01",
+  "text": "INVOICE #2026-0412\nBill to: Coastal Data Systems\nAttn: Yuki Tanaka\n900 Harbor Blvd, Suite 210, Oakland, CA 94607\n\nRemit to IBAN DE89370400440532013000\nAlternate: GB29NWBK60161331926819\nQuestions: ar@vendor.example or 510.555.0166\n\nLine items\n  Platform license, annual          4,111.00\n  Support tier 2                    1,240.00\n  PO reference 666-12-3456          0.00\n                          TOTAL     5,351.00\n\nTerms net 30. Wire fees not covered. Tax ID 94-1234567.\n",
+  "spans": [
+    {
+      "start": 28,
+      "end": 48,
+      "label": "ORG"
+    },
+    {
+      "start": 55,
+      "end": 66,
+      "label": "PERSON"
+    },
+    {
+      "start": 67,
+      "end": 112,
+      "label": "ADDRESS"
+    },
+    {
+      "start": 128,
+      "end": 150,
+      "label": "IBAN"
+    },
+    {
+      "start": 162,
+      "end": 184,
+      "label": "IBAN"
+    },
+    {
+      "start": 196,
+      "end": 213,
+      "label": "EMAIL"
+    },
+    {
+      "start": 217,
+      "end": 229,
+      "label": "PHONE_US"
+    }
+  ]
+}

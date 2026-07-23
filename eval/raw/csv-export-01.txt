@@ -1,0 +1,6 @@
+id,name,email,phone,ip_last_seen,notes
+1,{{PERSON:Alice Chen}},{{EMAIL:alice.chen@northwind.example}},{{PHONE_US:4155550142}},{{IPV4:73.140.22.9}},vip
+2,{{PERSON:Yuki Tanaka}},{{EMAIL:y.tanaka@coastal.example}},{{PHONE_US:510-555-0166}},{{IPV4:198.51.100.77}},
+3,{{PERSON:Priya Raghavan}},{{EMAIL:praghavan@webmail.example}},{{PHONE_US:6695550128}},,churn risk
+4,Test Account,noreply@example.invalid,0000000000,255.255.255.255,synthetic row
+5,{{PERSON:Marcus Delgado}},{{EMAIL:m.delgado@fastmail.example}},,,order total 4111

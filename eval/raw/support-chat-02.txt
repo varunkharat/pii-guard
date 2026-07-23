@@ -1,0 +1,11 @@
+Agent: Thanks for holding. Can you confirm the email on the account?
+Cust: yeah it's {{EMAIL:praghavan@webmail.example}}
+Agent: Got it. And the last four of the card?
+Cust: 4444. full number is {{CREDIT_CARD:5555 5555 5555 4444}} if you need it
+Agent: I don't need the full number, please don't send that in chat.
+Cust: sorry. my callback is {{PHONE_US:+1 669-555-0128}}
+Agent: Perfect. One more -- what year were you born?
+Cust: 1987
+Agent: Great. Order 4111222233334444 is refunded.
+Cust: wait is that last one a card number too
+Agent: no, that's an order ID, different format

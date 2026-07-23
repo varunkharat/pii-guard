@@ -1,0 +1,41 @@
+{
+  "id": "resume-01",
+  "text": "Marcus Delgado\n1847 Fillmore St, Apt 3B, San Francisco, CA 94115\nm.delgado@fastmail.example | (415) 555-0173\nLinkedIn: linkedin.com/in/marcusdelgado\n\nEXPERIENCE\nSenior Platform Engineer, Northwind Logistics (2021-present)\n  Reduced p99 latency from 4111ms to 890ms across the fleet.\n  Managed a team of 6. Employee ID 000-45-6789.\n\nSoftware Engineer, Coastal Data Systems (2018-2021)\n  Built ingest pipeline handling 192.168.0.0/16 internal traffic.\n\nEDUCATION\nB.S. Computer Science, UC Santa Cruz, 2018. GPA 3.7.\n\nReferences available on request. Preferred contact is email.\n",
+  "spans": [
+    {
+      "start": 0,
+      "end": 14,
+      "label": "PERSON"
+    },
+    {
+      "start": 15,
+      "end": 64,
+      "label": "ADDRESS"
+    },
+    {
+      "start": 65,
+      "end": 91,
+      "label": "EMAIL"
+    },
+    {
+      "start": 94,
+      "end": 108,
+      "label": "PHONE_US"
+    },
+    {
+      "start": 187,
+      "end": 206,
+      "label": "ORG"
+    },
+    {
+      "start": 351,
+      "end": 371,
+      "label": "ORG"
+    },
+    {
+      "start": 484,
+      "end": 497,
+      "label": "ORG"
+    }
+  ]
+}

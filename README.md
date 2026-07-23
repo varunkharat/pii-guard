@@ -87,9 +87,10 @@ Every fixture should include **hard negatives**: values that look like PII and
 aren't. The seed corpus has an invalid-area SSN, a bare number that resembles a
 card, and an out-of-range IP. Those are what stop the detector getting lazy.
 
-> The current corpus is 2 documents / 10 spans and scores 1.000 across the
-> board. That is a sign the corpus is too small, not that the detector is good.
-> Target 30–50 documents before trusting any number here.
+> Baseline as of the seed corpus (10 documents, 65 spans), layer 1 only:
+> **P 0.833 / R 0.692 / F1 0.756**. Recall is dragged down by PERSON, ORG,
+> ADDRESS and DOB, which layer 1 cannot see at all -- that is the gap layer 2
+> exists to close. Target 30-50 documents before treating these as stable.
 
 ## Not yet handled
 

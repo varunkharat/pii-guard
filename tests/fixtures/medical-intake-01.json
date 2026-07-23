@@ -1,0 +1,56 @@
+{
+  "id": "medical-intake-01",
+  "text": "PATIENT INTAKE FORM - Confidential\n\nName: Priya Raghavan\nDOB: 1987-03-14\nSSN: 412-77-6301\nMember ID: MBR-4829-1120\nPhone: 669-555-0128\nEmail: praghavan@webmail.example\nAddress: 22 Redwood Ct, Sunnyvale, CA 94086\n\nEmergency contact: Anil Raghavan, 669-555-0194\n\nInsurance group 3141-5926 (not an SSN). Copay 4111 rupees equivalent.\nPrimary care physician: Dr. Susan Okonjo at Valley Health Partners.\n",
+  "spans": [
+    {
+      "start": 42,
+      "end": 56,
+      "label": "PERSON"
+    },
+    {
+      "start": 62,
+      "end": 72,
+      "label": "DOB"
+    },
+    {
+      "start": 78,
+      "end": 89,
+      "label": "SSN"
+    },
+    {
+      "start": 122,
+      "end": 134,
+      "label": "PHONE_US"
+    },
+    {
+      "start": 142,
+      "end": 167,
+      "label": "EMAIL"
+    },
+    {
+      "start": 177,
+      "end": 211,
+      "label": "ADDRESS"
+    },
+    {
+      "start": 232,
+      "end": 245,
+      "label": "PERSON"
+    },
+    {
+      "start": 247,
+      "end": 259,
+      "label": "PHONE_US"
+    },
+    {
+      "start": 355,
+      "end": 371,
+      "label": "PERSON"
+    },
+    {
+      "start": 375,
+      "end": 397,
+      "label": "ORG"
+    }
+  ]
+}
