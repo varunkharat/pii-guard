@@ -57,7 +57,14 @@ def iban_valid(value: str) -> bool:
         return False
     return int(converted) % 97 == 1
 
+# RFC 2606 / RFC 6761 reserve these; they can never resolve to a real mailbox.
+RESERVED_TLDS = (".invalid", ".test", ".example", ".localhost")
 
+
+def email_valid(value: str) -> bool:
+    """Reject addresses that are structurally incapable of being real."""
+    domain = value.rsplit("@", 1)[-1].lower()
+    return not domain.endswith(RESERVED_TLDS)
 # --------------------------------------------------------------------------
 # Patterns
 # --------------------------------------------------------------------------
@@ -65,7 +72,7 @@ def iban_valid(value: str) -> bool:
 PATTERNS: dict[str, tuple[re.Pattern[str], object]] = {
     "EMAIL": (
         re.compile(r"\b[\w.+-]+@[\w-]+\.[\w.-]{2,}\b"),
-        None,
+        email_valid,
     ),
     "SSN": (
         re.compile(r"\b\d{3}[- ]?\d{2}[- ]?\d{4}\b"),
