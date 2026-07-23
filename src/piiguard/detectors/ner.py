@@ -32,21 +32,16 @@ LABEL_MAP = {
 # two layers overlap, the validated regex match wins.
 NER_SCORE = 0.85
 
-
+# spaCy tags bare uppercase acronyms as organizations. In documents full of
+# field labels and log levels -- SSN, IBAN, INFO, HRIS -- that is almost always
+# wrong, and a real org name in a document nearly always appears with at least
+# one lowercase letter or multiple tokens.
 def _plausible_org(value: str) -> bool:
-    """Reject bare uppercase acronyms tagged as organizations.
-
-    spaCy labels SSN, IBAN, INFO, HRIS and similar field labels and log levels
-    as ORG. In forms, logs and config files those are pervasive and always
-    wrong. A real organization name in a document almost always carries a
-    lowercase letter or spans multiple tokens.
-    """
     if value.isupper() and len(value) <= 5:
         return False
     if len(value.split()) == 1 and value.isupper():
         return False
     return True
-
 
 class NerDetector:
     name = "ner"
@@ -58,44 +53,33 @@ class NerDetector:
 
     def detect(self, text: str) -> list[Span]:
         doc = self._nlp(text)
-        spans: list[Span] = []
-
+        spans = []
         for ent in doc.ents:
             label = LABEL_MAP.get(ent.label_)
             if label is None:
                 continue
-
+            # spaCy spans routinely swallow trailing whitespace and newlines,
+            # which produced errors like "Alice Chen\nEmail". Trim to the
+            # actual entity text before recording offsets.
             start, end = ent.start_char, ent.end_char
-
-            # spaCy entities routinely run past the value into the next line's
-            # field label, producing spans like "Alice Chen\nEmail". In forms,
-            # logs and CSVs a single PII value never spans lines, so cut there.
             newline = text.find("\n", start, end)
             if newline != -1:
                 end = newline
-
             while end > start and text[end - 1].isspace():
                 end -= 1
             while start < end and text[start].isspace():
                 start += 1
             if start >= end:
                 continue
-
-            value = text[start:end]
-
-            # Checked after trimming so it sees the cleaned span, not spaCy's.
-            if label == "ORG" and not _plausible_org(value):
-                continue
-
             spans.append(
                 Span(
                     start=start,
                     end=end,
                     label=label,
-                    text=value,
+                    text=text[start:end],
                     score=NER_SCORE,
                     detector=self.name,
                 )
             )
-
         return spans
+    
