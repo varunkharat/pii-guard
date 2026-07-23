@@ -65,6 +65,29 @@ def email_valid(value: str) -> bool:
     """Reject addresses that are structurally incapable of being real."""
     domain = value.rsplit("@", 1)[-1].lower()
     return not domain.endswith(RESERVED_TLDS)
+
+def phone_valid(value: str) -> bool:
+    """Reject placeholder and test numbers."""
+    digits = re.sub(r"\D", "", value)
+    digits = digits[1:] if len(digits) == 11 and digits[0] == "1" else digits
+    if len(digits) != 10:
+        return False
+    if len(set(digits)) == 1:          # 0000000000, 1111111111
+        return False
+    if digits[0] in "01" or digits[3] in "01":   # invalid NANP area/exchange
+        return False
+    return True
+
+def ipv4_valid(value: str) -> bool:
+    """Reject addresses that cannot identify a person."""
+    octets = [int(o) for o in value.split(".")]
+    if octets[0] == 0 or octets[0] >= 224:      # unspecified, multicast, reserved
+        return False
+    if octets == [255, 255, 255, 255]:
+        return False
+    if octets[3] == 0:                          # network base, e.g. 192.168.0.0
+        return False
+    return True
 # --------------------------------------------------------------------------
 # Patterns
 # --------------------------------------------------------------------------
@@ -86,11 +109,11 @@ PATTERNS: dict[str, tuple[re.Pattern[str], object]] = {
         re.compile(
             r"(?<!\d)(?:\+?1[ .-]?)?\(?\d{3}\)?[ .-]?\d{3}[ .-]?\d{4}(?!\d)"
         ),
-        None,
+        phone_valid,
     ),
     "IPV4": (
         re.compile(r"\b(?:(?:25[0-5]|2[0-4]\d|1?\d?\d)\.){3}(?:25[0-5]|2[0-4]\d|1?\d?\d)\b"),
-        None,
+        ipv4_valid,
     ),
     "IBAN": (
         re.compile(r"\b[A-Z]{2}\d{2}[ ]?(?:[A-Z0-9]{4}[ ]?){2,7}[A-Z0-9]{1,4}\b"),
