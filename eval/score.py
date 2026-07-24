@@ -84,7 +84,7 @@ def char_set(spans) -> set[int]:
     return covered
 
 
-def build_pipeline(use_ner: bool) -> Pipeline:
+def build_pipeline(use_ner: bool, use_llm: bool = False) -> Pipeline:
     from piiguard.detectors.structured import StructuredDetector
 
     detectors = [RegexDetector(), StructuredDetector()]
@@ -92,6 +92,17 @@ def build_pipeline(use_ner: bool) -> Pipeline:
         from piiguard.detectors.ner import NerDetector
 
         detectors.append(NerDetector())
+    if use_llm:
+        from piiguard.detectors.llm import LlmDetector
+
+        llm = LlmDetector()
+        if not llm.available():
+            print(
+                f"note: --llm set but no Ollama server at {llm.host}:{llm.port}; "
+                "layer 3 contributes nothing and these numbers are layers 1-2.",
+                file=sys.stderr,
+            )
+        detectors.append(llm)
     return Pipeline(detectors=detectors)
 
 
@@ -99,6 +110,12 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--partial", action="store_true")
     ap.add_argument("--no-ner", action="store_true")
+    ap.add_argument(
+        "--llm",
+        action="store_true",
+        help="also run the local Ollama layer (needs a running server; no-op "
+        "without one)",
+    )
     ap.add_argument(
         "--fail-on-leak",
         metavar="LABELS",
@@ -114,7 +131,7 @@ def main() -> int:
     )
     args = ap.parse_args()
 
-    pipeline = build_pipeline(use_ner=not args.no_ner)
+    pipeline = build_pipeline(use_ner=not args.no_ner, use_llm=args.llm)
     counts: dict[str, dict[str, int]] = defaultdict(
         lambda: {"tp": 0, "fp": 0, "fn": 0}
     )

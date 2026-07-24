@@ -115,6 +115,7 @@ Layers 2 and 3 have to beat this baseline on the scorecard to earn their place.
 ```bash
 python eval/score.py            # precision / recall / F1 per label
 python eval/score.py --partial  # count overlap as a hit
+python eval/score.py --llm      # include layer 3 (needs a local Ollama server)
 
 # Gates (exit 2 on breach) — CI enforces the first one:
 python eval/score.py --no-ner --fail-on-leak SSN,CREDIT_CARD,IBAN,EMAIL,PHONE_US,IPV4,DOB
