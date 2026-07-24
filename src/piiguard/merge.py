@@ -49,6 +49,23 @@ MAX_GAP = 20
 # out of the entity, so "1847 Fillmore St" arrives as "Fillmore St".
 LEADING_NUMBER = re.compile(r"(\d{1,6}(?:-\d{1,4})?)\s+$")
 
+# The whole street line preceding an address tail. spaCy tags the city/state/
+# ZIP as a place but leaves the street unlabeled, so "900 Kestrel Way, Suite
+# 210, Oakland, CA 94607" arrived as just "Oakland, CA 94607" -- leaking the
+# house number, which is the most identifying part of an address. This matches
+# from the house number through an optional unit, up to the address tail.
+STREET_PREFIX = re.compile(
+    r"\d{1,6}(?:-\d{1,4})?\s+"                    # house number
+    r"(?:[A-Za-z0-9.'#-]+\s+){0,4}"              # up to 4 street-name words
+    r"(?:St|Street|Ave|Avenue|Blvd|Boulevard|Rd|Road|Ln|Lane|Dr|Drive|Ct"
+    r"|Court|Way|Pl|Place|Ter|Terrace|Cir|Circle|Pkwy|Parkway|Hwy|Highway"
+    r"|Sq|Square|Trl|Trail|Loop|Row|Pike|Path)\.?"   # street-type suffix
+    r"(?:[\s,]+(?:Apt|Apartment|Suite|Ste|Unit|Fl|Floor|Rm|Room|No|Bldg|#)\.?"
+    r"\s*#?\s*[\w-]+)?"                            # optional unit / apartment
+    r"[\s,]*$",                                    # only separators up to tail
+    re.IGNORECASE,
+)
+
 
 def merge_spans(
     spans: list[Span], priority: list[str] | None = None
@@ -116,16 +133,34 @@ def join_adjacent(text: str, spans: list[Span]) -> list[Span]:
 
 
 def _extend_left(text: str, span: Span) -> Span:
-    """Pull a street number into an address span.
+    """Pull the street line into an address span.
 
-    spaCy tags "Fillmore St" but not the "1847" in front of it, so the house
-    number survives redaction -- which is exactly the digit an address is
-    most identified by.
+    spaCy tags the city/state/ZIP tail but not the street in front of it, so
+    the house number and street name survive redaction -- exactly the part an
+    address is most identified by. Prefer the fullest street match (rightmost
+    house number that still reaches the tail); fall back to a bare leading
+    number for the case where spaCy already captured the street name itself.
     """
     if span.label != "ADDRESS":
         return span
     line_start = text.rfind("\n", 0, span.start) + 1
     prefix = text[line_start : span.start]
+
+    street_start = None
+    for m in re.finditer(r"\b\d", prefix):
+        if STREET_PREFIX.match(prefix, m.start()):
+            street_start = m.start()  # keep the rightmost match
+    if street_start is not None:
+        new_start = line_start + street_start
+        return Span(
+            start=new_start,
+            end=span.end,
+            label="ADDRESS",
+            text=text[new_start : span.end],
+            score=span.score,
+            detector=span.detector,
+        )
+
     m = LEADING_NUMBER.search(prefix)
     if not m:
         return span
