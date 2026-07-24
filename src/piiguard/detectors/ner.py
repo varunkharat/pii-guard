@@ -12,7 +12,18 @@ over span boundaries, which is the main open problem in this layer.
 
 from __future__ import annotations
 
+import re
+
 from ..types import Span
+
+# spaCy tags "Imani Vestergaard" but drops the honorific in front of it, so
+# "Dr. " survives redaction attached to a real name. Pull a preceding title
+# into the PERSON span. Anchored to the entity, same line only.
+TITLE = re.compile(
+    r"(?:Dr|Mr|Mrs|Ms|Miss|Mx|Prof|Professor|Rev|Fr|Hon|Sir|Dame"
+    r"|Capt|Sgt|Lt|Col|Gen|Maj|Adm)\.?\s+$",
+    re.IGNORECASE,
+)
 
 # spaCy entity types -> our labels.
 # GPE (geopolitical), LOC and FAC all contribute to addresses. spaCy returns
@@ -71,6 +82,11 @@ class NerDetector:
                 start += 1
             if start >= end:
                 continue
+            if label == "PERSON":
+                line_start = text.rfind("\n", 0, start) + 1
+                title = TITLE.search(text[line_start:start])
+                if title:
+                    start = line_start + title.start()
             if label == "ORG" and not _plausible_org(text[start:end]):
                 continue
             spans.append(
