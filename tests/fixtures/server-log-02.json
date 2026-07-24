@@ -1,0 +1,41 @@
+{
+  "id": "server-log-02",
+  "text": "2026-05-20T14:02:11Z INFO  auth: ok user=g.vance@pinehurst.example src=198.51.100.23\n2026-05-20T14:02:19Z WARN  geo: request from 203.0.113.77 flagged, path=/admin\n2026-05-20T14:03:02Z INFO  db: pool connected 172.19.44.9:5432 replicas=3\n2026-05-20T14:03:44Z ERROR pay: decline last4=8881 token=6011 0000 0000 0004\n2026-05-20T14:04:10Z DEBUG build: ver 999.1.1.1 sha 7f3a2c1 host box-224.0.0.1\n2026-05-20T14:05:05Z INFO  notify: sms queued to 646-555-0117\n2026-05-20T14:06:31Z INFO  broadcast: reset sent to 255.255.255.255 (all hosts)\n2026-05-20T14:07:00Z INFO  support: opened by y.solomon@vantage.example\n",
+  "spans": [
+    {
+      "start": 41,
+      "end": 66,
+      "label": "EMAIL"
+    },
+    {
+      "start": 71,
+      "end": 84,
+      "label": "IPV4"
+    },
+    {
+      "start": 130,
+      "end": 142,
+      "label": "IPV4"
+    },
+    {
+      "start": 210,
+      "end": 221,
+      "label": "IPV4"
+    },
+    {
+      "start": 295,
+      "end": 314,
+      "label": "CREDIT_CARD"
+    },
+    {
+      "start": 443,
+      "end": 455,
+      "label": "PHONE_US"
+    },
+    {
+      "start": 582,
+      "end": 607,
+      "label": "EMAIL"
+    }
+  ]
+}

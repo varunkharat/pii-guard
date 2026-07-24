@@ -1,0 +1,18 @@
+From: {{EMAIL:t.renner@meridianfreight.example}}
+To: {{EMAIL:e.marchetti@brightwave.example}}
+Subject: Re: onsite next week
+
+Elena,
+
+Confirmed for Tuesday. You can reach me on my cell at {{PHONE_US:503-555-0146}}
+if the gate code changes. I'll come to your office at
+{{ADDRESS:418 Marsh Wren Rd, Austin, TX 78745}}.
+
+One correction: the wire should go to {{IBAN:GB29NWBK60161331926819}}, not the
+account in my last note. The old reference 4111 1111 1111 1112 was a typo and
+never a live card.
+
+Best,
+{{PERSON:Tobias Renner}}
+{{ORG:Meridian Freight}}
+Desk {{PHONE_US:646-555-0100}} ext 12 -- but that mailbox line 011-555-0142 is dead.

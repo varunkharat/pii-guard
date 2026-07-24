@@ -1,0 +1,41 @@
+{
+  "id": "insurance-claim-01",
+  "text": "Harborlight Insurance - Auto Claim Intake\n\nClaimant: Elena Marchetti\nPolicy #: HL-4471-982\nDOB: 1988-07-22\nSSN: 205-19-6647\nHome address: 418 Marsh Wren Rd, Austin, TX 78745\nMobile: 512-555-0173\nEmail: e.marchetti@brightwave.example\n\nIncident date 2026-05-03 near mile marker 118 on I-35. Adjuster case number\n000-44-1200 is not an SSN. Estimated repair was 4820 dollars, authorization\nref 1002003004 on file. Rental plate 7XYZ123 is not a card number.\n",
+  "spans": [
+    {
+      "start": 0,
+      "end": 21,
+      "label": "ORG"
+    },
+    {
+      "start": 53,
+      "end": 68,
+      "label": "PERSON"
+    },
+    {
+      "start": 96,
+      "end": 106,
+      "label": "DOB"
+    },
+    {
+      "start": 112,
+      "end": 123,
+      "label": "SSN"
+    },
+    {
+      "start": 138,
+      "end": 173,
+      "label": "ADDRESS"
+    },
+    {
+      "start": 182,
+      "end": 194,
+      "label": "PHONE_US"
+    },
+    {
+      "start": 202,
+      "end": 232,
+      "label": "EMAIL"
+    }
+  ]
+}

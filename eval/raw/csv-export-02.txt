@@ -1,0 +1,6 @@
+id,name,company,email,phone,address
+1,{{PERSON:Fabiola Reyes}},{{ORG:Deltaform Labs}},{{EMAIL:f.reyes@deltaform.example}},{{PHONE_US:303-555-0117}},"{{ADDRESS:88 Thornfield St, Unit 12, Denver, CO 80203}}"
+2,{{PERSON:Gregor Vance}},{{ORG:Pinehurst Realty}},{{EMAIL:g.vance@pinehurst.example}},{{PHONE_US:303-555-0182}},"{{ADDRESS:640 Windlass Ct, Providence, RI 02903}}"
+3,{{PERSON:Yara Solomon}},{{ORG:Vantage Payroll}},{{EMAIL:y.solomon@vantage.example}},{{PHONE_US:401-555-0164}},"{{ADDRESS:12 Harbor Reach, Providence, RI 02906}}"
+4,Test User,,noreply@example.invalid,0000000000,
+5,{{PERSON:Idris Kaczmarek}},{{ORG:Brightwave Analytics}},{{EMAIL:i.kaczmarek@brightwave.example}},,"{{ADDRESS:1330 Sablefish Dr, Tampa, FL 33607}}"

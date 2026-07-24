@@ -1,0 +1,12 @@
+SHIP TO:
+{{PERSON:Priya Deshmukh}}
+{{ADDRESS:27 Copperline Ave, Apt 5, Portland, OR 97214}}
+Phone: {{PHONE_US:503-555-0182}}
+
+FROM:
+{{ORG:Meridian Freight}}
+Contact {{EMAIL:dispatch@meridianfreight.example}} for delays.
+
+Tracking 1Z999AA10123456784 (not a card). Parcel weight 4111 g.
+Delivery window 2026-06-02 08:00-12:00. Insured value 250 dollars.
+Do not route through hub 192.168.10.0 (network base, unreachable).

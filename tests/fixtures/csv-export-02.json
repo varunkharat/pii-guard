@@ -1,0 +1,101 @@
+{
+  "id": "csv-export-02",
+  "text": "id,name,company,email,phone,address\n1,Fabiola Reyes,Deltaform Labs,f.reyes@deltaform.example,303-555-0117,\"88 Thornfield St, Unit 12, Denver, CO 80203\"\n2,Gregor Vance,Pinehurst Realty,g.vance@pinehurst.example,303-555-0182,\"640 Windlass Ct, Providence, RI 02903\"\n3,Yara Solomon,Vantage Payroll,y.solomon@vantage.example,401-555-0164,\"12 Harbor Reach, Providence, RI 02906\"\n4,Test User,,noreply@example.invalid,0000000000,\n5,Idris Kaczmarek,Brightwave Analytics,i.kaczmarek@brightwave.example,,\"1330 Sablefish Dr, Tampa, FL 33607\"\n",
+  "spans": [
+    {
+      "start": 38,
+      "end": 51,
+      "label": "PERSON"
+    },
+    {
+      "start": 52,
+      "end": 66,
+      "label": "ORG"
+    },
+    {
+      "start": 67,
+      "end": 92,
+      "label": "EMAIL"
+    },
+    {
+      "start": 93,
+      "end": 105,
+      "label": "PHONE_US"
+    },
+    {
+      "start": 107,
+      "end": 150,
+      "label": "ADDRESS"
+    },
+    {
+      "start": 154,
+      "end": 166,
+      "label": "PERSON"
+    },
+    {
+      "start": 167,
+      "end": 183,
+      "label": "ORG"
+    },
+    {
+      "start": 184,
+      "end": 209,
+      "label": "EMAIL"
+    },
+    {
+      "start": 210,
+      "end": 222,
+      "label": "PHONE_US"
+    },
+    {
+      "start": 224,
+      "end": 261,
+      "label": "ADDRESS"
+    },
+    {
+      "start": 265,
+      "end": 277,
+      "label": "PERSON"
+    },
+    {
+      "start": 278,
+      "end": 293,
+      "label": "ORG"
+    },
+    {
+      "start": 294,
+      "end": 319,
+      "label": "EMAIL"
+    },
+    {
+      "start": 320,
+      "end": 332,
+      "label": "PHONE_US"
+    },
+    {
+      "start": 334,
+      "end": 371,
+      "label": "ADDRESS"
+    },
+    {
+      "start": 424,
+      "end": 439,
+      "label": "PERSON"
+    },
+    {
+      "start": 440,
+      "end": 460,
+      "label": "ORG"
+    },
+    {
+      "start": 461,
+      "end": 491,
+      "label": "EMAIL"
+    },
+    {
+      "start": 494,
+      "end": 528,
+      "label": "ADDRESS"
+    }
+  ]
+}

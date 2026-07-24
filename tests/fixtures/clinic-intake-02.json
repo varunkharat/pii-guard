@@ -1,0 +1,56 @@
+{
+  "id": "clinic-intake-02",
+  "text": "Oakmont Clinic Group - New Patient Form\n\nPatient: Colm Feeney\nDate of birth: 1990-11-02\nSSN: 314-52-8890\nAddress: 1330 Sablefish Dr, Tampa, FL 33607\nCell: 813-555-0129\nEmail: c.feeney@brightwave.example\n\nEmergency contact: Aisha Bello, 813-555-0164\nReferring physician: Dr. Lars Ostergaard\n\nVisit date 2026-04-19. Record locator 666-12-9000 is an internal chart ID,\nnot an SSN. Copay 45 dollars collected. Prior clinic fax line 000-000-0000 is\ndisconnected.\n",
+  "spans": [
+    {
+      "start": 0,
+      "end": 20,
+      "label": "ORG"
+    },
+    {
+      "start": 50,
+      "end": 61,
+      "label": "PERSON"
+    },
+    {
+      "start": 77,
+      "end": 87,
+      "label": "DOB"
+    },
+    {
+      "start": 93,
+      "end": 104,
+      "label": "SSN"
+    },
+    {
+      "start": 114,
+      "end": 148,
+      "label": "ADDRESS"
+    },
+    {
+      "start": 155,
+      "end": 167,
+      "label": "PHONE_US"
+    },
+    {
+      "start": 175,
+      "end": 202,
+      "label": "EMAIL"
+    },
+    {
+      "start": 223,
+      "end": 234,
+      "label": "PERSON"
+    },
+    {
+      "start": 236,
+      "end": 248,
+      "label": "PHONE_US"
+    },
+    {
+      "start": 270,
+      "end": 289,
+      "label": "PERSON"
+    }
+  ]
+}

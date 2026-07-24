@@ -1,0 +1,19 @@
+{{ORG:Copperline Mutual}}
+Statement notice - account ending 8842
+
+Dear {{PERSON:Tobias Renner}},
+
+We could not process the transfer to your linked account
+{{IBAN:DE89370400440532013000}}. Please confirm the destination IBAN and
+resubmit. A refund of the failed fee was applied to card
+{{CREDIT_CARD:4012 8888 8888 1881}}.
+
+For verification, DOB: {{DOB:03/14/1979}}. Your number on file is
+{{PHONE_US:503-555-0146}}.
+
+Reference 4111 1111 1111 1112 is a rejected transaction token, not a card.
+Your customer ID 900-33-1200 is not a Social Security number. Branch routing
+011000015 is public information.
+
+Regards,
+{{PERSON:Naomi Sturridge}}, Customer Care

@@ -1,0 +1,15 @@
+Rental Application - Unit 4B
+
+Applicant: {{PERSON:Devon Achebe}}
+Current address: {{ADDRESS:640 Windlass Ct, Providence, RI 02903}}
+Phone: {{PHONE_US:401-555-0164}}
+Email: {{EMAIL:d.achebe@brightwave.example}}
+Date of birth: {{DOB:1993-02-17}}
+SSN (for credit check): {{SSN:452-70-1183}}
+
+Current employer: {{ORG:Meridian Freight}}
+Supervisor: {{PERSON:Yara Solomon}}, {{PHONE_US:401-555-0117}}
+
+Applicant ID 900-00-0000 is assigned by our office, not a government number.
+Requested move-in 2026-07-01. Monthly rent 2100 dollars, deposit 4111.
+Prior landlord reference number 12-3456 is not sensitive.

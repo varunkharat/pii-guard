@@ -1,0 +1,41 @@
+{
+  "id": "bank-notice-01",
+  "text": "Copperline Mutual\nStatement notice - account ending 8842\n\nDear Tobias Renner,\n\nWe could not process the transfer to your linked account\nDE89370400440532013000. Please confirm the destination IBAN and\nresubmit. A refund of the failed fee was applied to card\n4012 8888 8888 1881.\n\nFor verification, DOB: 03/14/1979. Your number on file is\n503-555-0146.\n\nReference 4111 1111 1111 1112 is a rejected transaction token, not a card.\nYour customer ID 900-33-1200 is not a Social Security number. Branch routing\n011000015 is public information.\n\nRegards,\nNaomi Sturridge, Customer Care\n",
+  "spans": [
+    {
+      "start": 0,
+      "end": 17,
+      "label": "ORG"
+    },
+    {
+      "start": 63,
+      "end": 76,
+      "label": "PERSON"
+    },
+    {
+      "start": 136,
+      "end": 158,
+      "label": "IBAN"
+    },
+    {
+      "start": 257,
+      "end": 276,
+      "label": "CREDIT_CARD"
+    },
+    {
+      "start": 302,
+      "end": 312,
+      "label": "DOB"
+    },
+    {
+      "start": 337,
+      "end": 349,
+      "label": "PHONE_US"
+    },
+    {
+      "start": 547,
+      "end": 562,
+      "label": "PERSON"
+    }
+  ]
+}

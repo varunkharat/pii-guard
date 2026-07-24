@@ -1,0 +1,46 @@
+{
+  "id": "email-thread-01",
+  "text": "From: t.renner@meridianfreight.example\nTo: e.marchetti@brightwave.example\nSubject: Re: onsite next week\n\nElena,\n\nConfirmed for Tuesday. You can reach me on my cell at 503-555-0146\nif the gate code changes. I'll come to your office at\n418 Marsh Wren Rd, Austin, TX 78745.\n\nOne correction: the wire should go to GB29NWBK60161331926819, not the\naccount in my last note. The old reference 4111 1111 1111 1112 was a typo and\nnever a live card.\n\nBest,\nTobias Renner\nMeridian Freight\nDesk 646-555-0100 ext 12 -- but that mailbox line 011-555-0142 is dead.\n",
+  "spans": [
+    {
+      "start": 6,
+      "end": 38,
+      "label": "EMAIL"
+    },
+    {
+      "start": 43,
+      "end": 73,
+      "label": "EMAIL"
+    },
+    {
+      "start": 167,
+      "end": 179,
+      "label": "PHONE_US"
+    },
+    {
+      "start": 234,
+      "end": 269,
+      "label": "ADDRESS"
+    },
+    {
+      "start": 310,
+      "end": 332,
+      "label": "IBAN"
+    },
+    {
+      "start": 446,
+      "end": 459,
+      "label": "PERSON"
+    },
+    {
+      "start": 460,
+      "end": 476,
+      "label": "ORG"
+    },
+    {
+      "start": 482,
+      "end": 494,
+      "label": "PHONE_US"
+    }
+  ]
+}
