@@ -1,0 +1,36 @@
+{
+  "id": "background-check-01",
+  "text": "Background Verification Report\n\nSubject: Tobias Renner\nDOB: 1985-06-30\nSSN: 519-33-6642\nCurrent address: 52 Birchwood Ln, Seattle, WA 98103\nPrior address: 27 Copperline Ave, Portland, OR 97214\n\nMost recent employer: Meridian Freight.\nCase reference 666-00-1200 is internal, not an SSN. Report generated\n2026-06-01. Credit score 742.\n",
+  "spans": [
+    {
+      "start": 41,
+      "end": 54,
+      "label": "PERSON"
+    },
+    {
+      "start": 60,
+      "end": 70,
+      "label": "DOB"
+    },
+    {
+      "start": 76,
+      "end": 87,
+      "label": "SSN"
+    },
+    {
+      "start": 105,
+      "end": 139,
+      "label": "ADDRESS"
+    },
+    {
+      "start": 155,
+      "end": 192,
+      "label": "ADDRESS"
+    },
+    {
+      "start": 216,
+      "end": 232,
+      "label": "ORG"
+    }
+  ]
+}

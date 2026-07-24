@@ -1,0 +1,5 @@
+name	ssn	email	address
+{{PERSON:Marcus Halloway}}	{{SSN:213-46-7789}}	{{EMAIL:m.halloway@cascadia.example}}	{{ADDRESS:52 Birchwood Ln, Seattle, WA 98103}}
+{{PERSON:Naomi Sturridge}}	{{SSN:267-55-9103}}	{{EMAIL:n.sturridge@calverton.example}}	{{ADDRESS:640 Windlass Ct, Providence, RI 02903}}
+{{PERSON:Devon Achebe}}	{{SSN:388-21-4470}}	{{EMAIL:d.achebe@brightwave.example}}	{{ADDRESS:88 Thornfield St, Unit 12, Denver, CO 80203}}
+Test Row	000-00-0000	noreply@example.invalid	

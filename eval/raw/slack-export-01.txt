@@ -1,0 +1,10 @@
+#support (2026-06-20)
+
+@dana: hey can you verify the account holder?
+@agent: sure -- name and email?
+@dana: {{PERSON:Aisha Bello}}, {{EMAIL:a.bello@brightwave.example}}
+@agent: got it. callback number?
+@dana: {{PHONE_US:305-555-0193}}
+@agent: thanks. I see an SSN on file ending 6642 -- don't paste the full one
+@dana: won't. order 4111222233334444 is just the ticket id
+@agent: perfect, that's not a card

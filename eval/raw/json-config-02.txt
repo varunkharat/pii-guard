@@ -1,0 +1,10 @@
+{
+  "service": "billing-worker",
+  "admin_email": "{{EMAIL:ops@vantage.example}}",
+  "alert_phone": "{{PHONE_US:720-555-0126}}",
+  "db_host": "{{IPV4:10.4.2.9}}",
+  "public_ip": "{{IPV4:198.51.100.9}}",
+  "api_key": "sk_live_4f9c2a7b1e",
+  "smtp_host": "smtp.relay.example",
+  "max_retry_ms": 4111
+}

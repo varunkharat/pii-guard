@@ -137,19 +137,21 @@ Every fixture should include **hard negatives**: values that look like PII and
 aren't. The seed corpus has an invalid-area SSN, a bare number that resembles a
 card, and an out-of-range IP. Those are what stop the detector getting lazy.
 
-> Corpus, 18 documents. The number that matters is the **character-level
+> Corpus, 30 documents. The number that matters is the **character-level
 > leak rate** — the fraction of labeled PII characters surviving redaction:
 >
 > | | leak rate | over-redaction | span F1 |
 > |---|---|---|---|
-> | layer 1 (regex + structure) | 27.2% | 3.0% | 0.814 |
-> | layer 1 + `--ner` | **1.5%** | 6.6% | 0.942 |
+> | layer 1 (regex + structure) | 32.1% | 2.4% | 0.771 |
+> | layer 1 + `--ner` | **1.0%** | 8.0% | 0.921 |
 >
 > Span F1 is a diagnostic only: it scores a one-character-short span the same
 > as a total miss and penalizes over- and under-redaction equally, which is
 > wrong for a scrubber. The residual leak is almost entirely organization
-> names spaCy misses (an insurer, a clinic) — the gap layer 3 exists to close.
-> Target 30-50 documents before treating these as stable.
+> names spaCy misses (an insurer, a clinic); the over-redaction is mostly
+> spaCy over-tagging document titles, which is cheap by design. Closing the
+> org gap is what layer 3 is for. At 30 documents this is the low end of a
+> stable range.
 
 ## Not yet handled
 

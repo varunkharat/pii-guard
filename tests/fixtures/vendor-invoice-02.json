@@ -1,0 +1,36 @@
+{
+  "id": "vendor-invoice-02",
+  "text": "INVOICE #2026-0731\nBill to: Deltaform Labs\nAttn: Yara Solomon\n45 Sparrow Lane, Providence, RI 02906\n\nRemit to IBAN GB82WEST12345698765432.\nQuestions: ar@deltaform.example or 401-555-0164.\n\nPO 4471028 and order total 4111 are not card numbers. Due 2026-08-15.\n",
+  "spans": [
+    {
+      "start": 28,
+      "end": 42,
+      "label": "ORG"
+    },
+    {
+      "start": 49,
+      "end": 61,
+      "label": "PERSON"
+    },
+    {
+      "start": 62,
+      "end": 99,
+      "label": "ADDRESS"
+    },
+    {
+      "start": 115,
+      "end": 137,
+      "label": "IBAN"
+    },
+    {
+      "start": 150,
+      "end": 170,
+      "label": "EMAIL"
+    },
+    {
+      "start": 174,
+      "end": 186,
+      "label": "PHONE_US"
+    }
+  ]
+}

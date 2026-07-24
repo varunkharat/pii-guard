@@ -1,0 +1,9 @@
+Grant Deed
+
+Grantor (seller): {{PERSON:Fabiola Reyes}}
+Grantee (buyer): {{PERSON:Devon Achebe}}
+Property: {{ADDRESS:88 Thornfield St, Unit 12, Denver, CO 80203}}
+Escrow via {{ORG:Pinehurst Realty}}, agent line {{PHONE_US:303-555-0182}}.
+
+APN 0491-223-118 is the assessor parcel number, not a card or SSN.
+Recording date 2026-05-30. Consideration 415000 dollars.

@@ -1,0 +1,36 @@
+{
+  "id": "tax-form-01",
+  "text": "Form W-2 Wage and Tax Statement - 2025\n\nEmployee: Marcus Halloway\nSSN: 213-46-7789\nAddress: 52 Birchwood Ln, Seattle, WA 98103\n\nEmployer: Cascadia Timber Co\nEmployer EIN 91-4471028 is not an SSN. Wages 61200 dollars.\nControl number 000-00-1234 is internal, not a Social Security number.\nPayroll questions: payroll@cascadia.example or 206-555-0148.\n",
+  "spans": [
+    {
+      "start": 50,
+      "end": 65,
+      "label": "PERSON"
+    },
+    {
+      "start": 71,
+      "end": 82,
+      "label": "SSN"
+    },
+    {
+      "start": 92,
+      "end": 126,
+      "label": "ADDRESS"
+    },
+    {
+      "start": 138,
+      "end": 156,
+      "label": "ORG"
+    },
+    {
+      "start": 306,
+      "end": 330,
+      "label": "EMAIL"
+    },
+    {
+      "start": 334,
+      "end": 346,
+      "label": "PHONE_US"
+    }
+  ]
+}

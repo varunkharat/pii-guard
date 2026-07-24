@@ -1,0 +1,10 @@
+{{ORG:Calverton State University}} - Enrollment Record
+
+Student: {{PERSON:Naomi Sturridge}}
+Student email: {{EMAIL:n.sturridge@calverton.example}}
+DOB: {{DOB:2001-04-18}}
+Home address: {{ADDRESS:640 Windlass Ct, Providence, RI 02903}}
+Guardian: {{PERSON:Idris Kaczmarek}}, {{PHONE_US:401-555-0117}}
+
+Student ID 000-11-2233 is assigned by the registrar, not an SSN.
+Term begins 2026-08-24. Cumulative GPA 3.9.

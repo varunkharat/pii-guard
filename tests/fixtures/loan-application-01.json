@@ -1,0 +1,46 @@
+{
+  "id": "loan-application-01",
+  "text": "Consumer Loan Application\n\nApplicant: Priya Deshmukh\nDate of birth: 11/09/1972\nSSN: 405-88-2210\nHome: 27 Copperline Ave, Apt 5, Portland, OR 97214\nPhone: 503-555-0182\nEmail: p.deshmukh@brightwave.example\n\nEmployer: Meridian Freight. Requested 24000 dollars over 48 months.\nDeposit to IBAN FR1420041010050500013M02606.\nApplication ID 900-00-0000 is not an SSN. Prior loan ref 4111 1111 1111 1112\nwas never a live card.\n",
+  "spans": [
+    {
+      "start": 38,
+      "end": 52,
+      "label": "PERSON"
+    },
+    {
+      "start": 68,
+      "end": 78,
+      "label": "DOB"
+    },
+    {
+      "start": 84,
+      "end": 95,
+      "label": "SSN"
+    },
+    {
+      "start": 102,
+      "end": 146,
+      "label": "ADDRESS"
+    },
+    {
+      "start": 154,
+      "end": 166,
+      "label": "PHONE_US"
+    },
+    {
+      "start": 174,
+      "end": 203,
+      "label": "EMAIL"
+    },
+    {
+      "start": 215,
+      "end": 231,
+      "label": "ORG"
+    },
+    {
+      "start": 289,
+      "end": 316,
+      "label": "IBAN"
+    }
+  ]
+}

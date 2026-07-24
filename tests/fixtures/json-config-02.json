@@ -1,0 +1,26 @@
+{
+  "id": "json-config-02",
+  "text": "{\n  \"service\": \"billing-worker\",\n  \"admin_email\": \"ops@vantage.example\",\n  \"alert_phone\": \"720-555-0126\",\n  \"db_host\": \"10.4.2.9\",\n  \"public_ip\": \"198.51.100.9\",\n  \"api_key\": \"sk_live_4f9c2a7b1e\",\n  \"smtp_host\": \"smtp.relay.example\",\n  \"max_retry_ms\": 4111\n}\n",
+  "spans": [
+    {
+      "start": 51,
+      "end": 70,
+      "label": "EMAIL"
+    },
+    {
+      "start": 91,
+      "end": 103,
+      "label": "PHONE_US"
+    },
+    {
+      "start": 120,
+      "end": 128,
+      "label": "IPV4"
+    },
+    {
+      "start": 147,
+      "end": 159,
+      "label": "IPV4"
+    }
+  ]
+}

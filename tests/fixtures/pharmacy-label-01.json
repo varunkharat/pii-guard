@@ -1,0 +1,36 @@
+{
+  "id": "pharmacy-label-01",
+  "text": "Riverbend Pharmacy\n\nPatient: Colm Feeney\nDOB: 1990-11-02\nAddress: 1330 Sablefish Dr, Tampa, FL 33607\nPhone: 813-555-0129\n\nRx 4471028 - take one tablet daily. Prescriber Dr. Lars Ostergaard,\nNPI 1558372046. Refills: 2. Queue order 4111222233334444 is not a card.\n",
+  "spans": [
+    {
+      "start": 0,
+      "end": 18,
+      "label": "ORG"
+    },
+    {
+      "start": 29,
+      "end": 40,
+      "label": "PERSON"
+    },
+    {
+      "start": 46,
+      "end": 56,
+      "label": "DOB"
+    },
+    {
+      "start": 66,
+      "end": 100,
+      "label": "ADDRESS"
+    },
+    {
+      "start": 108,
+      "end": 120,
+      "label": "PHONE_US"
+    },
+    {
+      "start": 169,
+      "end": 188,
+      "label": "PERSON"
+    }
+  ]
+}

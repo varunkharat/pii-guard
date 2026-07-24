@@ -1,0 +1,66 @@
+{
+  "id": "contacts-01",
+  "text": "name\tssn\temail\taddress\nMarcus Halloway\t213-46-7789\tm.halloway@cascadia.example\t52 Birchwood Ln, Seattle, WA 98103\nNaomi Sturridge\t267-55-9103\tn.sturridge@calverton.example\t640 Windlass Ct, Providence, RI 02903\nDevon Achebe\t388-21-4470\td.achebe@brightwave.example\t88 Thornfield St, Unit 12, Denver, CO 80203\nTest Row\t000-00-0000\tnoreply@example.invalid\t\n",
+  "spans": [
+    {
+      "start": 23,
+      "end": 38,
+      "label": "PERSON"
+    },
+    {
+      "start": 39,
+      "end": 50,
+      "label": "SSN"
+    },
+    {
+      "start": 51,
+      "end": 78,
+      "label": "EMAIL"
+    },
+    {
+      "start": 79,
+      "end": 113,
+      "label": "ADDRESS"
+    },
+    {
+      "start": 114,
+      "end": 129,
+      "label": "PERSON"
+    },
+    {
+      "start": 130,
+      "end": 141,
+      "label": "SSN"
+    },
+    {
+      "start": 142,
+      "end": 171,
+      "label": "EMAIL"
+    },
+    {
+      "start": 172,
+      "end": 209,
+      "label": "ADDRESS"
+    },
+    {
+      "start": 210,
+      "end": 222,
+      "label": "PERSON"
+    },
+    {
+      "start": 223,
+      "end": 234,
+      "label": "SSN"
+    },
+    {
+      "start": 235,
+      "end": 262,
+      "label": "EMAIL"
+    },
+    {
+      "start": 263,
+      "end": 306,
+      "label": "ADDRESS"
+    }
+  ]
+}

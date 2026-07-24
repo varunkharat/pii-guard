@@ -1,0 +1,9 @@
+CRM Note - Account 8842
+
+Spoke with {{PERSON:Elena Marchetti}} re: renewal. Best number
+{{PHONE_US:512-555-0173}}, prefers email {{EMAIL:e.marchetti@brightwave.example}}.
+Billing address on file: {{ADDRESS:418 Marsh Wren Rd, Austin, TX 78745}}.
+Company {{ORG:Brightwave Analytics}}.
+
+She read the last four of her card as 1111 but did not send the full number.
+Case ref 1002003004 is ours, not a phone. Follow up 2026-07-15.

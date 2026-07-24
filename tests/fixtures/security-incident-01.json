@@ -1,0 +1,31 @@
+{
+  "id": "security-incident-01",
+  "text": "SEV-2 Incident 2026-06-14 - unauthorized access\n\nSummary: account g.vance@pinehurst.example signed in from\n203.0.113.77, not a known source, then pivoted to internal host\n10.0.8.31.\n\nAffected user Gregor Vance was reached at 401-555-0164.\nCVE-2026-1337 is unrelated. Jump box 999.1.1.1 is a placeholder, and the\nload balancer 255.255.255.255 was not the source. Commit 8a2f19c reviewed.\n",
+  "spans": [
+    {
+      "start": 66,
+      "end": 91,
+      "label": "EMAIL"
+    },
+    {
+      "start": 107,
+      "end": 119,
+      "label": "IPV4"
+    },
+    {
+      "start": 171,
+      "end": 180,
+      "label": "IPV4"
+    },
+    {
+      "start": 197,
+      "end": 209,
+      "label": "PERSON"
+    },
+    {
+      "start": 225,
+      "end": 237,
+      "label": "PHONE_US"
+    }
+  ]
+}
