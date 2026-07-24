@@ -23,6 +23,36 @@ def _read(path: str) -> str:
     return Path(path).read_text(encoding="utf-8", errors="replace")
 
 
+def _build_detectors(use_ner: bool) -> list:
+    """Layer 1 always; layer 2 only when asked.
+
+    spaCy is not a base dependency -- the stdlib-only regex layer is the
+    default so `piiguard` runs with zero installs. `--ner` opts into the NER
+    layer, importing spaCy lazily so its absence costs nothing until then.
+    """
+    from .detectors import RegexDetector
+
+    detectors: list = [RegexDetector()]
+    if use_ner:
+        try:
+            from .detectors.ner import NerDetector
+
+            detectors.append(NerDetector())
+        except ImportError:
+            raise SystemExit(
+                "piiguard: --ner needs spaCy and a model. Install with:\n"
+                "  python -m pip install spacy\n"
+                "  python -m spacy download en_core_web_lg"
+            )
+        except OSError:
+            raise SystemExit(
+                "piiguard: spaCy is installed but the 'en_core_web_lg' model "
+                "is missing. Install it with:\n"
+                "  python -m spacy download en_core_web_lg"
+            )
+    return detectors
+
+
 def _build_policy(args) -> Policy:
     per_label = {}
     for item in args.set or []:
@@ -43,6 +73,11 @@ def main(argv: list[str] | None = None) -> int:
     scan = sub.add_parser("scan", help="report PII without modifying anything")
     scan.add_argument("path", help="file to scan, or - for stdin")
     scan.add_argument("--json", action="store_true", help="machine-readable output")
+    scan.add_argument(
+        "--ner",
+        action="store_true",
+        help="also run the spaCy NER layer (names, orgs, addresses)",
+    )
 
     red = sub.add_parser("redact", help="rewrite PII according to a policy")
     red.add_argument("path", help="file to redact, or - for stdin")
@@ -64,12 +99,17 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="do not fail if PII survives redaction (not recommended)",
     )
+    red.add_argument(
+        "--ner",
+        action="store_true",
+        help="also run the spaCy NER layer (names, orgs, addresses)",
+    )
 
     args = parser.parse_args(argv)
     text = _read(args.path)
 
     if args.command == "scan":
-        spans = Pipeline().scan(text)
+        spans = Pipeline(detectors=_build_detectors(args.ner)).scan(text)
         if args.json:
             print(
                 json.dumps(
@@ -92,7 +132,9 @@ def main(argv: list[str] | None = None) -> int:
             print(f"\n{len(spans)} finding(s)", file=sys.stderr)
         return 0
 
-    pipeline = Pipeline(policy=_build_policy(args))
+    pipeline = Pipeline(
+        detectors=_build_detectors(args.ner), policy=_build_policy(args)
+    )
     try:
         result = pipeline.redact(text, strict=not args.no_verify)
     except LeakError as exc:

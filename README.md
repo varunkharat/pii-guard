@@ -40,7 +40,15 @@ piiguard redact notes.txt -o clean.txt
 piiguard redact notes.txt --policy pseudonymize
 piiguard redact notes.txt --set SSN=mask --set IPV4=keep
 cat log.txt | piiguard redact - --policy mask
+
+piiguard scan notes.txt --ner        # add the NER layer (names, orgs, addresses)
+piiguard redact notes.txt --ner
 ```
+
+The base tool runs layer 1 only, with zero installs. `--ner` opts into the
+spaCy layer; it is off by default so the tool stays stdlib-only until you ask
+for more coverage. Without the model installed, `--ner` prints how to get it
+rather than failing obscurely.
 
 ### Policy modes
 
@@ -61,7 +69,7 @@ surrogates are **not** reversible unless you deliberately persist it.
 | layer | status | what it catches |
 |---|---|---|
 | 1. regex + validators | ✅ built | SSN, credit card, phone, email, IPv4, IBAN |
-| 2. NER (Presidio/spaCy) | planned | names, orgs, locations |
+| 2. NER (spaCy) | ✅ built, opt-in `--ner` | names, orgs, locations |
 | 3. local LLM (Ollama) | planned | context-dependent PII the first two miss |
 
 Layer 1 first on purpose: no dependencies, microsecond latency, and real
