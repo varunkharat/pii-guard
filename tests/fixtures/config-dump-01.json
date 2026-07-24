@@ -1,6 +1,6 @@
 {
   "id": "config-dump-01",
-  "text": "# staging.env - DO NOT COMMIT\nDATABASE_URL=postgres://svc_app:hunter2@10.0.4.17:5432/appdb\nREDIS_HOST=10.0.4.22\nSMTP_HOST=smtp.mailgun.example\nSMTP_USER=postmaster@mg.northwind.example\nADMIN_CONTACT=ops@northwind.example\nONCALL_PHONE=415-555-0111\nALLOWED_ORIGINS=https://app.northwind.example\nSENTRY_DSN=https://abc123@o4507.ingest.sentry.example/1\nPUBLIC_EGRESS_IP=203.0.113.44\nMAX_UPLOAD_MB=4111\n",
+  "text": "# staging.env - DO NOT COMMIT\nDATABASE_URL=postgres://svc_app:hunter2@10.0.4.17:5432/appdb\nREDIS_HOST=10.0.4.22\nSMTP_HOST=smtp.mailrelay.example\nSMTP_USER=postmaster@mg.northwind.example\nADMIN_CONTACT=ops@northwind.example\nONCALL_PHONE=415-555-0111\nALLOWED_ORIGINS=https://app.northwind.example\nSENTRY_DSN=https://abc123@o4507.ingest.errortrack.example/1\nPUBLIC_EGRESS_IP=203.0.113.44\nMAX_UPLOAD_MB=4111\n",
   "spans": [
     {
       "start": 70,
@@ -13,23 +13,23 @@
       "label": "IPV4"
     },
     {
-      "start": 153,
-      "end": 184,
+      "start": 155,
+      "end": 186,
       "label": "EMAIL"
     },
     {
-      "start": 199,
-      "end": 220,
+      "start": 201,
+      "end": 222,
       "label": "EMAIL"
     },
     {
-      "start": 234,
-      "end": 246,
+      "start": 236,
+      "end": 248,
       "label": "PHONE_US"
     },
     {
-      "start": 366,
-      "end": 378,
+      "start": 372,
+      "end": 384,
       "label": "IPV4"
     }
   ]

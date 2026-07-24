@@ -1,20 +1,20 @@
 {
   "id": "support-chat-02",
-  "text": "Agent: Thanks for holding. Can you confirm the email on the account?\nCust: yeah it's praghavan@webmail.example\nAgent: Got it. And the last four of the card?\nCust: 4444. full number is 5555 5555 5555 4444 if you need it\nAgent: I don't need the full number, please don't send that in chat.\nCust: sorry. my callback is +1 669-555-0128\nAgent: Perfect. One more -- what year were you born?\nCust: 1987\nAgent: Great. Order 4111222233334444 is refunded.\nCust: wait is that last one a card number too\nAgent: no, that's an order ID, different format\n",
+  "text": "Agent: Thanks for holding. Can you confirm the email on the account?\nCust: yeah it's nachterberg@webmail.example\nAgent: Got it. And the last four of the card?\nCust: 4444. full number is 5555 5555 5555 4444 if you need it\nAgent: I don't need the full number, please don't send that in chat.\nCust: sorry. my callback is +1 669-555-0128\nAgent: Perfect. One more -- what year were you born?\nCust: 1987\nAgent: Great. Order 4111222233334444 is refunded.\nCust: wait is that last one a card number too\nAgent: no, that's an order ID, different format\n",
   "spans": [
     {
       "start": 85,
-      "end": 110,
+      "end": 112,
       "label": "EMAIL"
     },
     {
-      "start": 184,
-      "end": 203,
+      "start": 186,
+      "end": 205,
       "label": "CREDIT_CARD"
     },
     {
-      "start": 316,
-      "end": 331,
+      "start": 318,
+      "end": 333,
       "label": "PHONE_US"
     }
   ]

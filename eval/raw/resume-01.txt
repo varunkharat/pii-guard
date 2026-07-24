@@ -1,7 +1,7 @@
-{{PERSON:Marcus Delgado}}
-{{ADDRESS:1847 Fillmore St, Apt 3B, San Francisco, CA 94115}}
-{{EMAIL:m.delgado@fastmail.example}} | {{PHONE_US:(415) 555-0173}}
-LinkedIn: linkedin.com/in/marcusdelgado
+{{PERSON:Dov Halloran}}
+{{ADDRESS:1847 Larkfield Ln, Apt 3B, San Francisco, CA 94115}}
+{{EMAIL:d.halloran@mailbox.example}} | {{PHONE_US:(415) 555-0173}}
+Profile: profiles.example/in/dhalloran
 
 EXPERIENCE
 Senior Platform Engineer, {{ORG:Northwind Logistics}} (2021-present)
@@ -12,6 +12,6 @@ Software Engineer, {{ORG:Coastal Data Systems}} (2018-2021)
   Built ingest pipeline handling 192.168.0.0/16 internal traffic.
 
 EDUCATION
-B.S. Computer Science, {{ORG:UC Santa Cruz}}, 2018. GPA 3.7.
+B.S. Computer Science, {{ORG:Calverton State University}}, 2018. GPA 3.7.
 
 References available on request. Preferred contact is email.

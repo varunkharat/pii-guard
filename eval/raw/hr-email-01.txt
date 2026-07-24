@@ -4,7 +4,7 @@ Subject: Offer approved - req 4821
 
 Team,
 
-The offer for {{PERSON:Marcus Delgado}} is approved. Start date 4/6.
+The offer for {{PERSON:Dov Halloran}} is approved. Start date 4/6.
 His direct line once provisioned will be {{PHONE_US:415-555-0188}}.
 
 Please do not forward his SSN ({{SSN:078-05-1120}}) over email again -- route
@@ -14,4 +14,4 @@ that through the HRIS. Same goes for the bank details he sent
 Badge number 900-11-2222 is fine to share, that's not sensitive.
 
 Thanks,
-{{PERSON:Dana Whitfield}}
+{{PERSON:Petra Nkemdirim}}

@@ -1,7 +1,7 @@
 Ticket #48210 - password reset failing
 
-Reporter: {{PERSON:Alice Chen}}
-Email: {{EMAIL:alice.chen@northwind.example}}
+Reporter: {{PERSON:Marisol Ferrante}}
+Email: {{EMAIL:m.ferrante@northwind.example}}
 Callback: {{PHONE_US:415-555-0142}}
 
 Customer says she cannot log in from her home IP {{IPV4:73.140.22.9}}.

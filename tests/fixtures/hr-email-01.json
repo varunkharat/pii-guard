@@ -1,6 +1,6 @@
 {
   "id": "hr-email-01",
-  "text": "From: hr@northwind.example\nTo: managers@northwind.example\nSubject: Offer approved - req 4821\n\nTeam,\n\nThe offer for Marcus Delgado is approved. Start date 4/6.\nHis direct line once provisioned will be 415-555-0188.\n\nPlease do not forward his SSN (078-05-1120) over email again -- route\nthat through the HRIS. Same goes for the bank details he sent\n(FR1420041010050500013M02606).\n\nBadge number 900-11-2222 is fine to share, that's not sensitive.\n\nThanks,\nDana Whitfield\n",
+  "text": "From: hr@northwind.example\nTo: managers@northwind.example\nSubject: Offer approved - req 4821\n\nTeam,\n\nThe offer for Dov Halloran is approved. Start date 4/6.\nHis direct line once provisioned will be 415-555-0188.\n\nPlease do not forward his SSN (078-05-1120) over email again -- route\nthat through the HRIS. Same goes for the bank details he sent\n(FR1420041010050500013M02606).\n\nBadge number 900-11-2222 is fine to share, that's not sensitive.\n\nThanks,\nPetra Nkemdirim\n",
   "spans": [
     {
       "start": 6,
@@ -14,27 +14,27 @@
     },
     {
       "start": 115,
-      "end": 129,
+      "end": 127,
       "label": "PERSON"
     },
     {
-      "start": 200,
-      "end": 212,
+      "start": 198,
+      "end": 210,
       "label": "PHONE_US"
     },
     {
-      "start": 246,
-      "end": 257,
+      "start": 244,
+      "end": 255,
       "label": "SSN"
     },
     {
-      "start": 348,
-      "end": 375,
+      "start": 346,
+      "end": 373,
       "label": "IBAN"
     },
     {
-      "start": 453,
-      "end": 467,
+      "start": 451,
+      "end": 466,
       "label": "PERSON"
     }
   ]

@@ -1,7 +1,7 @@
 INVOICE #2026-0412
 Bill to: {{ORG:Coastal Data Systems}}
-Attn: {{PERSON:Yuki Tanaka}}
-{{ADDRESS:900 Harbor Blvd, Suite 210, Oakland, CA 94607}}
+Attn: {{PERSON:Corinne Ashby}}
+{{ADDRESS:900 Kestrel Way, Suite 210, Oakland, CA 94607}}
 
 Remit to IBAN {{IBAN:DE89370400440532013000}}
 Alternate: {{IBAN:GB29NWBK60161331926819}}
