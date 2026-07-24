@@ -70,7 +70,13 @@ STREET_PREFIX = re.compile(
 def merge_spans(
     spans: list[Span], priority: list[str] | None = None
 ) -> list[Span]:
-    """Return non-overlapping spans sorted by start offset."""
+    """Return non-overlapping spans sorted by start offset.
+
+    On an overlap the winner is the higher score, then the longer span, then
+    detector priority. The length tie-break matters for a scrubber: when a
+    whole-cell address and the regex state+ZIP inside it are both maximally
+    confident, keeping the longer one covers the street too.
+    """
     priority = priority or DEFAULT_PRIORITY
 
     def rank(span: Span) -> tuple:

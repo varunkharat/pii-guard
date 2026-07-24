@@ -52,6 +52,24 @@ def test_non_overlapping_spans_all_kept():
     assert len(merge_spans([a, b])) == 2
 
 
+def test_whole_cell_address_wins_over_regex_zip_inside_it():
+    """A whole-cell structured address (score 1.0) and the regex state+ZIP
+    inside it (also 1.0) tie on score; the longer one must win so the street
+    is not dropped."""
+    whole = Span(0, 37, "ADDRESS", "12 Harbor Reach, Providence, RI 02906",
+                 score=1.0, detector="structured")
+    zip_only = Span(29, 37, "ADDRESS", "RI 02906", score=1.0, detector="regex")
+    assert merge_spans([zip_only, whole]) == [whole]
+
+
+def test_higher_score_sub_span_wins_when_labels_differ():
+    """But cross-label containment is unaffected: a validated PHONE inside a
+    loose PERSON span still wins on score."""
+    person = Span(0, 20, "PERSON", "x", score=0.6, detector="ner")
+    phone = Span(5, 17, "PHONE_US", "y", score=1.0, detector="regex")
+    assert merge_spans([person, phone]) == [phone]
+
+
 # -- policy -------------------------------------------------------------
 
 

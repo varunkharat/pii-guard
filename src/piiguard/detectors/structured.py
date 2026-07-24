@@ -46,7 +46,11 @@ COLUMN_LABELS: list[tuple[str, frozenset[str]]] = [
     })),
 ]
 
-STRUCT_SCORE = 0.95  # above NER (0.85), below validated regex (1.0)
+# Column position is as strong a signal as a validated regex: a cell under a
+# `name` header holds a person however the free-text model parses it. So these
+# score 1.0, and on any overlap the merge's length tie-break keeps the fuller
+# span -- a whole-cell address wins over the regex state+ZIP sitting inside it.
+STRUCT_SCORE = 1.0
 
 MIN_TABLE_ROWS = 3          # header + at least two data rows
 MIN_TABLE_COLUMNS = 2
