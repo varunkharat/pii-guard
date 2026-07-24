@@ -14,6 +14,7 @@ from pathlib import Path
 
 from .pipeline import Pipeline
 from .policy import Policy
+from .vault import load_vault, restore_text, write_vault
 from .verify import LeakError
 
 
@@ -131,6 +132,21 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="also run the local Ollama layer (context-dependent PII)",
     )
+    red.add_argument(
+        "--vault",
+        metavar="PATH",
+        help="write a surrogate->original key here so the redaction can be "
+        "reversed with 'restore'. Contains PII; kept local. Not for mask mode.",
+    )
+
+    rest = sub.add_parser(
+        "restore", help="reverse a redaction using its vault key"
+    )
+    rest.add_argument("path", help="redacted file to restore, or - for stdin")
+    rest.add_argument(
+        "--vault", required=True, metavar="PATH", help="vault written during redact"
+    )
+    rest.add_argument("-o", "--output", help="write here instead of stdout")
 
     args = parser.parse_args(argv)
     text = _read(args.path)
@@ -161,6 +177,18 @@ def main(argv: list[str] | None = None) -> int:
             print(f"\n{len(spans)} finding(s)", file=sys.stderr)
         return 0
 
+    if args.command == "restore":
+        vault = load_vault(args.vault)
+        restored = restore_text(text, vault)
+        if args.output:
+            Path(args.output).write_text(restored, encoding="utf-8")
+            print(
+                f"restored {len(vault)} value(s) -> {args.output}", file=sys.stderr
+            )
+        else:
+            sys.stdout.write(restored)
+        return 0
+
     pipeline = Pipeline(
         detectors=_build_detectors(args.ner, args.llm), policy=_build_policy(args)
     )
@@ -169,6 +197,24 @@ def main(argv: list[str] | None = None) -> int:
     except LeakError as exc:
         print(f"piiguard: {exc}", file=sys.stderr)
         return 2
+
+    if args.vault:
+        entries = pipeline.engine.vault_entries()
+        if entries:
+            total = write_vault(args.vault, entries)
+            print(
+                f"piiguard: wrote {len(entries)} reversible mapping(s) to "
+                f"{args.vault} ({total} total). This file contains the "
+                f"original PII -- keep it as protected as the source.",
+                file=sys.stderr,
+            )
+        else:
+            print(
+                f"piiguard: --vault given but policy '{args.policy}' produced no "
+                "reversible mappings (mask is lossy, keep is a no-op); "
+                "nothing written.",
+                file=sys.stderr,
+            )
 
     if args.output:
         Path(args.output).write_text(result.redacted, encoding="utf-8")

@@ -48,6 +48,10 @@ piiguard redact notes.txt --policy pseudonymize
 piiguard redact notes.txt --set SSN=mask --set IPV4=keep
 cat log.txt | piiguard redact - --policy mask
 
+# Reversible: write a local key, then undo the redaction later
+piiguard redact notes.txt --policy pseudonymize --vault notes.key.json -o clean.txt
+piiguard restore clean.txt --vault notes.key.json -o notes.restored.txt
+
 piiguard scan notes.txt --ner        # add the NER layer (names, orgs, addresses)
 piiguard redact notes.txt --ner
 piiguard redact notes.txt --ner --llm  # add the local Ollama layer too
@@ -69,8 +73,14 @@ rather than failing obscurely.
 
 Pseudonymization is deterministic within a run: the same input value always maps
 to the same surrogate, so `Alice` stays one consistent person across a document
-and coreference survives redaction. The salt is ephemeral by default, so
-surrogates are **not** reversible unless you deliberately persist it.
+and coreference survives redaction. The salt is ephemeral by default, so by
+default a redaction is one-way.
+
+To make it reversible, pass `--vault PATH`. That writes a local key file mapping
+each surrogate back to its original, and `piiguard restore` uses it to undo the
+redaction (works for `label` and `pseudonymize`; `mask` is lossy). The vault
+holds the exact PII that was removed — it is as sensitive as the source, and,
+like everything here, it never leaves your machine.
 
 ## Detector layers
 
@@ -146,7 +156,6 @@ card, and an out-of-range IP. Those are what stop the detector getting lazy.
 - Images and PDFs (OCR path)
 - JSON / nested structured formats (CSV and TSV columns are handled)
 - Non-US phone, national ID, and address formats
-- Reversible tokenization with a persisted local vault
 
 ## License
 

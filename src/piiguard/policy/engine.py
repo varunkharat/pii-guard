@@ -57,6 +57,10 @@ class PolicyEngine:
         self.salt = salt or secrets.token_bytes(32)
         self._counters: dict[str, int] = {}
         self._assigned: dict[tuple[str, str], str] = {}
+        # First-seen surface form per surrogate, for a reversible vault. The
+        # dedup key is lowercased; this keeps the real casing so restore is
+        # exact.
+        self._originals: dict[str, str] = {}
 
     # -- surrogate generation ------------------------------------------
 
@@ -79,6 +83,7 @@ class PolicyEngine:
         else:
             surrogate = f"[{label}_{h % 1000:03d}]"
         self._assigned[key] = surrogate
+        self._originals.setdefault(surrogate, value.strip())
         return surrogate
 
     def _label_token(self, label: str, value: str) -> str:
@@ -88,6 +93,7 @@ class PolicyEngine:
         self._counters[label] = self._counters.get(label, 0) + 1
         token = f"[{label}_{self._counters[label]}]"
         self._assigned[key] = token
+        self._originals.setdefault(token, value.strip())
         return token
 
     @staticmethod
@@ -124,6 +130,26 @@ class PolicyEngine:
     def mapping(self) -> dict[str, str]:
         """Original -> surrogate, for audit. Contains PII; handle with care."""
         return {value: surrogate for (_, value), surrogate in self._assigned.items()}
+
+    def vault_entries(self) -> list[dict[str, str]]:
+        """Reversible surrogate -> original records for this run.
+
+        Only label and pseudonymize survive here: mask is lossy and keep is a
+        no-op, so neither can be reversed. Each surrogate carries the first
+        surface form it stood in for, so restore reproduces the original
+        casing. This is the PII the redaction removed -- persisting it is the
+        deliberate, opt-in step that makes redaction reversible.
+        """
+        entries = []
+        for (label, _norm), surrogate in self._assigned.items():
+            entries.append(
+                {
+                    "label": label,
+                    "surrogate": surrogate,
+                    "original": self._originals[surrogate],
+                }
+            )
+        return entries
 
     @property
     def surrogates(self) -> set[str]:
