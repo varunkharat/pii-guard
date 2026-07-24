@@ -85,7 +85,9 @@ def char_set(spans) -> set[int]:
 
 
 def build_pipeline(use_ner: bool) -> Pipeline:
-    detectors = [RegexDetector()]
+    from piiguard.detectors.structured import StructuredDetector
+
+    detectors = [RegexDetector(), StructuredDetector()]
     if use_ner:
         from piiguard.detectors.ner import NerDetector
 

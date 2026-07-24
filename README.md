@@ -69,8 +69,15 @@ surrogates are **not** reversible unless you deliberately persist it.
 | layer | status | what it catches |
 |---|---|---|
 | 1. regex + validators | ✅ built | SSN, credit card, phone, email, IPv4, IBAN |
+| 1b. table structure | ✅ built | whole-cell PII in CSV/TSV name/org/address columns |
 | 2. NER (spaCy) | ✅ built, opt-in `--ner` | names, orgs, locations |
 | 3. local LLM (Ollama) | planned | context-dependent PII the first two miss |
+
+The structure layer is also stdlib-only. In a delimited table it reads the
+header and redacts entire cells of the person/org/address columns — catching
+names a per-cell model fumbles (`Nia Achterberg` splits or vanishes) while
+leaving validator-backed columns (email, phone, IP) to layer 1, so a row's
+placeholder hard negatives still get correctly rejected.
 
 Layer 1 first on purpose: no dependencies, microsecond latency, and real
 validators (Luhn, SSA allocation rules, IBAN mod-97) rather than shape-matching
@@ -100,19 +107,19 @@ card, and an out-of-range IP. Those are what stop the detector getting lazy.
 >
 > | | leak rate | over-redaction | span F1 |
 > |---|---|---|---|
-> | layer 1 only | 30.5% | 4.1% | 0.806 |
-> | layer 1 + `--ner` | **4.4%** | 5.4% | 0.915 |
+> | layer 1 (regex + structure) | 26.2% | 5.0% | 0.837 |
+> | layer 1 + `--ner` | **1.7%** | 5.6% | 0.965 |
 >
 > Span F1 is a diagnostic only: it scores a one-character-short span the same
 > as a total miss and penalizes over- and under-redaction equally, which is
-> wrong for a scrubber. The residual layer-2 leak is names in CSV columns and
-> the occasional missed organization — the gap layers 2 (column-aware) and 3
-> exist to close. Target 30-50 documents before treating these as stable.
+> wrong for a scrubber. The residual leak is now a single missed organization
+> name — the gap layer 3 exists to close. Target 30-50 documents before
+> treating these as stable.
 
 ## Not yet handled
 
 - Images and PDFs (OCR path)
-- Structured formats — CSV/JSON column-aware redaction
+- JSON / nested structured formats (CSV and TSV columns are handled)
 - Non-US phone, national ID, and address formats
 - Reversible tokenization with a persisted local vault
 

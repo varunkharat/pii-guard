@@ -31,8 +31,9 @@ def _build_detectors(use_ner: bool) -> list:
     layer, importing spaCy lazily so its absence costs nothing until then.
     """
     from .detectors import RegexDetector
+    from .detectors.structured import StructuredDetector
 
-    detectors: list = [RegexDetector()]
+    detectors: list = [RegexDetector(), StructuredDetector()]
     if use_ner:
         try:
             from .detectors.ner import NerDetector

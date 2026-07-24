@@ -22,7 +22,7 @@ import re
 
 from .types import Span
 
-DEFAULT_PRIORITY = ["regex", "ner", "llm"]
+DEFAULT_PRIORITY = ["regex", "structured", "ner", "llm"]
 
 # Labels that can be fused into a single address. ORG is here because spaCy
 # routinely mislabels address tails ("CA 94607", "Redwood Ct") as

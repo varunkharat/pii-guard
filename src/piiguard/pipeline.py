@@ -9,6 +9,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from .detectors import RegexDetector
+from .detectors.structured import StructuredDetector
 from .merge import join_adjacent, merge_spans
 from .policy import Policy, PolicyEngine
 from .types import Span
@@ -34,7 +35,11 @@ class Pipeline:
         policy: Policy | None = None,
         salt: bytes | None = None,
     ) -> None:
-        self.detectors = detectors if detectors is not None else [RegexDetector()]
+        self.detectors = (
+            detectors
+            if detectors is not None
+            else [RegexDetector(), StructuredDetector()]
+        )
         self.policy = policy or Policy()
         self.engine = PolicyEngine(self.policy, salt=salt)
 

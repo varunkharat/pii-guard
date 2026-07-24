@@ -77,6 +77,46 @@ def test_per_label_override():
     assert "a@b.example" not in result.redacted
 
 
+# -- structured (tables) ------------------------------------------------
+
+
+def test_csv_name_column_redacted_whole_cell():
+    """Names a per-cell model would fumble get caught by column position."""
+    from piiguard.detectors.structured import StructuredDetector
+
+    text = (
+        "id,name,email\n"
+        "1,Nia Achterberg,nia@webmail.example\n"
+        "2,Dov Halloran,d.halloran@mailbox.example\n"
+    )
+    persons = {s.text for s in StructuredDetector().detect(text) if s.label == "PERSON"}
+    assert persons == {"Nia Achterberg", "Dov Halloran"}
+
+
+def test_csv_leaves_validated_columns_to_regex():
+    """A placeholder the email validator rejects must survive: the structured
+    detector must not blindly redact the whole email column."""
+    text = (
+        "id,name,email\n"
+        "1,Nia Achterberg,nia@webmail.example\n"
+        "2,Ann Lee,noreply@example.invalid\n"
+    )
+    result = Pipeline(policy=Policy(default="label")).redact(text)
+    assert "Nia Achterberg" not in result.redacted
+    assert "noreply@example.invalid" in result.redacted
+
+
+def test_prose_with_commas_is_not_a_table():
+    from piiguard.detectors.structured import StructuredDetector
+
+    text = (
+        "Dear Marisol, thanks for your note.\n"
+        "We will, as discussed, follow up soon.\n"
+        "Best, the team\n"
+    )
+    assert StructuredDetector().detect(text) == []
+
+
 # -- verify -------------------------------------------------------------
 
 
