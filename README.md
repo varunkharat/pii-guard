@@ -105,7 +105,16 @@ Layers 2 and 3 have to beat this baseline on the scorecard to earn their place.
 ```bash
 python eval/score.py            # precision / recall / F1 per label
 python eval/score.py --partial  # count overlap as a hit
+
+# Gates (exit 2 on breach) — CI enforces the first one:
+python eval/score.py --no-ner --fail-on-leak SSN,CREDIT_CARD,IBAN,EMAIL,PHONE_US,IPV4,DOB
+python eval/score.py --max-leak-rate 5
 ```
+
+The validator-backed labels are pure layer 1, so their leak rate is gated in
+CI: if an SSN, card, IBAN, email, phone, IP, or DOB ever survives redaction,
+the build fails. Like the no-egress test, this makes a core promise a property
+under test rather than a claim.
 
 Authoring fixtures — never hand-count offsets:
 

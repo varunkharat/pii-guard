@@ -99,6 +99,19 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--partial", action="store_true")
     ap.add_argument("--no-ner", action="store_true")
+    ap.add_argument(
+        "--fail-on-leak",
+        metavar="LABELS",
+        help="comma-separated labels that must not leak any span; exit 2 if any "
+        "does. For the validator-backed labels (SSN, EMAIL, ...) this turns "
+        "'these never survive redaction' into a CI-enforced property.",
+    )
+    ap.add_argument(
+        "--max-leak-rate",
+        type=float,
+        metavar="PCT",
+        help="exit 2 if the overall character leak rate exceeds this percent",
+    )
     args = ap.parse_args()
 
     pipeline = build_pipeline(use_ner=not args.no_ner)
@@ -197,6 +210,26 @@ def main() -> int:
         print("\nErrors:")
         for doc_id, kind, detail in misses:
             print(f"  [{kind}] {doc_id}: {detail}")
+
+    # -- gates: turn thresholds into a non-zero exit for CI ----------------
+    failures: list[str] = []
+    if args.fail_on_leak:
+        for label in (l.strip().upper() for l in args.fail_on_leak.split(",")):
+            if not label:
+                continue
+            fn = counts[label]["fn"]
+            if fn:
+                failures.append(f"{label} leaked {fn} span(s) (recall < 1.0)")
+    if args.max_leak_rate is not None and leak_rate * 100 > args.max_leak_rate:
+        failures.append(
+            f"leak rate {leak_rate:.1%} exceeds budget {args.max_leak_rate:.1f}%"
+        )
+
+    if failures:
+        print("\nGATE FAILED:")
+        for f in failures:
+            print(f"  {f}")
+        return 2
     return 0
 
 

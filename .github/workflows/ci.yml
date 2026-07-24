@@ -16,8 +16,12 @@ jobs:
         run: pytest tests/test_no_egress.py -v
       - name: unit tests
         run: pytest -q
-      # Layer 1 only: CI does not install spaCy or its ~600MB model. The
-      # scorecard here is a smoke test that the eval harness still runs, not
-      # a measure of full detector quality.
-      - name: detector scorecard
-        run: python eval/score.py --no-ner
+      # Layer 1 only: CI does not install spaCy or its ~600MB model, so the
+      # NER/LLM labels (PERSON, ORG, ADDRESS) are out of reach here. But the
+      # validator-backed labels are pure layer 1 and must never leak -- gate
+      # on that so "structured PII does not survive redaction" is enforced,
+      # not just measured. This property is stable as the corpus grows.
+      - name: detector scorecard + leak gate
+        run: >
+          python eval/score.py --no-ner
+          --fail-on-leak SSN,CREDIT_CARD,IBAN,EMAIL,PHONE_US,IPV4,DOB
