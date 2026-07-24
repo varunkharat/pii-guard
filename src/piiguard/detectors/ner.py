@@ -71,6 +71,8 @@ class NerDetector:
                 start += 1
             if start >= end:
                 continue
+            if label == "ORG" and not _plausible_org(text[start:end]):
+                continue
             spans.append(
                 Span(
                     start=start,
