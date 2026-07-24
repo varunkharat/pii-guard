@@ -23,12 +23,13 @@ def _read(path: str) -> str:
     return Path(path).read_text(encoding="utf-8", errors="replace")
 
 
-def _build_detectors(use_ner: bool) -> list:
-    """Layer 1 always; layer 2 only when asked.
+def _build_detectors(use_ner: bool, use_llm: bool) -> list:
+    """Layer 1 always; layers 2 and 3 only when asked.
 
-    spaCy is not a base dependency -- the stdlib-only regex layer is the
-    default so `piiguard` runs with zero installs. `--ner` opts into the NER
-    layer, importing spaCy lazily so its absence costs nothing until then.
+    Neither spaCy nor a local model is a base dependency -- the stdlib layers
+    are the default so `piiguard` runs with zero installs. `--ner` and `--llm`
+    opt into the heavier layers, imported lazily so their absence costs
+    nothing until then.
     """
     from .detectors import RegexDetector
     from .detectors.structured import StructuredDetector
@@ -51,6 +52,21 @@ def _build_detectors(use_ner: bool) -> list:
                 "is missing. Install it with:\n"
                 "  python -m spacy download en_core_web_lg"
             )
+    if use_llm:
+        from .detectors.llm import LlmDetector
+
+        llm = LlmDetector()
+        if not llm.available():
+            # Fail loud, not open: the user asked for layer 3 and is not
+            # getting it, so say so rather than under-redact silently.
+            print(
+                f"piiguard: --llm requested but no Ollama server answered at "
+                f"{llm.host}:{llm.port}; layer 3 skipped. Start it with "
+                f"'ollama serve' and pull a model ('ollama pull {llm.model}').",
+                file=sys.stderr,
+            )
+        else:
+            detectors.append(llm)
     return detectors
 
 
@@ -79,6 +95,11 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="also run the spaCy NER layer (names, orgs, addresses)",
     )
+    scan.add_argument(
+        "--llm",
+        action="store_true",
+        help="also run the local Ollama layer (context-dependent PII)",
+    )
 
     red = sub.add_parser("redact", help="rewrite PII according to a policy")
     red.add_argument("path", help="file to redact, or - for stdin")
@@ -105,12 +126,19 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="also run the spaCy NER layer (names, orgs, addresses)",
     )
+    red.add_argument(
+        "--llm",
+        action="store_true",
+        help="also run the local Ollama layer (context-dependent PII)",
+    )
 
     args = parser.parse_args(argv)
     text = _read(args.path)
 
     if args.command == "scan":
-        spans = Pipeline(detectors=_build_detectors(args.ner)).scan(text)
+        spans = Pipeline(
+            detectors=_build_detectors(args.ner, args.llm)
+        ).scan(text)
         if args.json:
             print(
                 json.dumps(
@@ -134,7 +162,7 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     pipeline = Pipeline(
-        detectors=_build_detectors(args.ner), policy=_build_policy(args)
+        detectors=_build_detectors(args.ner, args.llm), policy=_build_policy(args)
     )
     try:
         result = pipeline.redact(text, strict=not args.no_verify)

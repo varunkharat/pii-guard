@@ -20,6 +20,13 @@ This turns "trust us, it's local" into a property under test. If someone later
 adds a telemetry ping or a model download at runtime, the build breaks and they
 have to defend it in review.
 
+The one exception is layer 3, which talks to a model server on this same
+machine. The guarantee is refined, not dropped: "never leaves your machine"
+becomes "never leaves loopback." All layer-3 traffic goes through a single
+guard (`localnet.py`) that permits `127.0.0.0/8` and `::1` and raises on
+anything else — including a DNS name it would have to resolve — and the test
+suite asserts both halves: loopback allowed, external refused.
+
 ## Install
 
 ```bash
@@ -43,6 +50,7 @@ cat log.txt | piiguard redact - --policy mask
 
 piiguard scan notes.txt --ner        # add the NER layer (names, orgs, addresses)
 piiguard redact notes.txt --ner
+piiguard redact notes.txt --ner --llm  # add the local Ollama layer too
 ```
 
 The base tool runs layer 1 only, with zero installs. `--ner` opts into the
@@ -71,7 +79,15 @@ surrogates are **not** reversible unless you deliberately persist it.
 | 1. regex + validators | ✅ built | SSN, credit card, phone, email, IPv4, IBAN |
 | 1b. table structure | ✅ built | whole-cell PII in CSV/TSV name/org/address columns |
 | 2. NER (spaCy) | ✅ built, opt-in `--ner` | names, orgs, locations |
-| 3. local LLM (Ollama) | planned | context-dependent PII the first two miss |
+| 3. local LLM (Ollama) | ✅ built, opt-in `--llm` | context-dependent PII the first two miss |
+
+Layer 3 needs a local Ollama server (`ollama serve`, then `ollama pull
+llama3.2`); without one, `--llm` prints that it was skipped and the pipeline
+proceeds on layers 1–2 rather than failing. The model returns verbatim
+substrings, never offsets — piiguard locates them itself and discards anything
+the model did not copy exactly, so a hallucinated span cannot corrupt output.
+Its quality is not yet on the scorecard below (no Ollama in CI); the offset
+mapping, loopback guard, and fail-closed behavior are covered by tests.
 
 The structure layer is also stdlib-only. In a delimited table it reads the
 header and redacts entire cells of the person/org/address columns — catching
