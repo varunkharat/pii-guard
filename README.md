@@ -95,10 +95,19 @@ Every fixture should include **hard negatives**: values that look like PII and
 aren't. The seed corpus has an invalid-area SSN, a bare number that resembles a
 card, and an out-of-range IP. Those are what stop the detector getting lazy.
 
-> Baseline as of the seed corpus (10 documents, 65 spans), layer 1 only:
-> **P 0.833 / R 0.692 / F1 0.756**. Recall is dragged down by PERSON, ORG,
-> ADDRESS and DOB, which layer 1 cannot see at all -- that is the gap layer 2
-> exists to close. Target 30-50 documents before treating these as stable.
+> Seed corpus, 10 documents. The number that matters is the **character-level
+> leak rate** — the fraction of labeled PII characters surviving redaction:
+>
+> | | leak rate | over-redaction | span F1 |
+> |---|---|---|---|
+> | layer 1 only | 30.5% | 4.1% | 0.806 |
+> | layer 1 + `--ner` | **4.4%** | 5.4% | 0.915 |
+>
+> Span F1 is a diagnostic only: it scores a one-character-short span the same
+> as a total miss and penalizes over- and under-redaction equally, which is
+> wrong for a scrubber. The residual layer-2 leak is names in CSV columns and
+> the occasional missed organization — the gap layers 2 (column-aware) and 3
+> exist to close. Target 30-50 documents before treating these as stable.
 
 ## Not yet handled
 
