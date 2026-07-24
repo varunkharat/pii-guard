@@ -79,7 +79,15 @@ RESERVED_TLDS = (".invalid", ".test", ".localhost")
 def email_valid(value: str) -> bool:
     """Reject addresses that are structurally incapable of being real."""
     domain = value.rsplit("@", 1)[-1].lower()
-    return not domain.endswith(RESERVED_TLDS)
+    if domain.endswith(RESERVED_TLDS):
+        return False
+    # A rightmost domain label that is all digits means this is user@host --
+    # a credential against an IP or numeric host from a connection string
+    # ("hunter2@10.0.4.17"), not a mailbox. Matching it as EMAIL also shadows
+    # the real IPv4 span, which is longer and would otherwise be redacted.
+    if not domain.rsplit(".", 1)[-1].isalpha():
+        return False
+    return True
 
 
 def phone_valid(value: str) -> bool:
