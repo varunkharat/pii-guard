@@ -1,0 +1,31 @@
+{
+  "id": "json-record-01",
+  "text": "{\n  \"customer_name\": \"Elena Marchetti\",\n  \"company\": \"Brightwave Analytics\",\n  \"email\": \"e.marchetti@brightwave.example\",\n  \"phone\": \"512-555-0173\",\n  \"billing_address\": \"418 Marsh Wren Rd, Austin, TX 78745\",\n  \"account_note\": \"prefers email contact; VIP tier\",\n  \"internal_id\": \"cust-000-11-2233\"\n}\n",
+  "spans": [
+    {
+      "start": 22,
+      "end": 37,
+      "label": "PERSON"
+    },
+    {
+      "start": 54,
+      "end": 74,
+      "label": "ORG"
+    },
+    {
+      "start": 89,
+      "end": 119,
+      "label": "EMAIL"
+    },
+    {
+      "start": 134,
+      "end": 146,
+      "label": "PHONE_US"
+    },
+    {
+      "start": 171,
+      "end": 206,
+      "label": "ADDRESS"
+    }
+  ]
+}

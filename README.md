@@ -87,7 +87,7 @@ like everything here, it never leaves your machine.
 | layer | status | what it catches |
 |---|---|---|
 | 1. regex + validators | ✅ built | SSN, credit card, phone, email, IPv4, IBAN |
-| 1b. table structure | ✅ built | whole-cell PII in CSV/TSV name/org/address columns |
+| 1b. structure | ✅ built | whole-value PII in CSV/TSV columns and JSON keys |
 | 2. NER (spaCy) | ✅ built, opt-in `--ner` | names, orgs, locations |
 | 3. local LLM (Ollama) | ✅ built, opt-in `--llm` | context-dependent PII the first two miss |
 
@@ -100,10 +100,12 @@ Its quality is not yet on the scorecard below (no Ollama in CI); the offset
 mapping, loopback guard, and fail-closed behavior are covered by tests.
 
 The structure layer is also stdlib-only. In a delimited table it reads the
-header and redacts entire cells of the person/org/address columns — catching
-names a per-cell model fumbles (`Nia Achterberg` splits or vanishes) while
-leaving validator-backed columns (email, phone, IP) to layer 1, so a row's
-placeholder hard negatives still get correctly rejected.
+header and redacts entire cells of the person/org/address columns; in JSON it
+does the same for values whose key names a person, org, or address
+(`"customer_name": "..."`). Either way it catches names a per-cell model
+fumbles (`Nia Achterberg` splits or vanishes) while leaving validator-backed
+fields (email, phone, IP) to layer 1, so a record's placeholder hard negatives
+still get correctly rejected.
 
 Layer 1 first on purpose: no dependencies, microsecond latency, and real
 validators (Luhn, SSA allocation rules, IBAN mod-97) rather than shape-matching
@@ -157,7 +159,7 @@ card, and an out-of-range IP. Those are what stop the detector getting lazy.
 ## Not yet handled
 
 - Images and PDFs (OCR path)
-- JSON / nested structured formats (CSV and TSV columns are handled)
+- Deeply nested / array-of-object JSON (flat JSON objects, CSV, and TSV are handled)
 - Non-US phone, national ID, and address formats
 
 ## License

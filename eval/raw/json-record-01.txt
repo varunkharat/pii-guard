@@ -1,0 +1,9 @@
+{
+  "customer_name": "{{PERSON:Elena Marchetti}}",
+  "company": "{{ORG:Brightwave Analytics}}",
+  "email": "{{EMAIL:e.marchetti@brightwave.example}}",
+  "phone": "{{PHONE_US:512-555-0173}}",
+  "billing_address": "{{ADDRESS:418 Marsh Wren Rd, Austin, TX 78745}}",
+  "account_note": "prefers email contact; VIP tier",
+  "internal_id": "cust-000-11-2233"
+}

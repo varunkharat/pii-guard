@@ -135,6 +135,31 @@ def test_prose_with_commas_is_not_a_table():
     assert StructuredDetector().detect(text) == []
 
 
+def test_json_key_marks_person_org_address_values():
+    from piiguard.detectors.structured import StructuredDetector
+
+    text = (
+        '{"customer_name": "Nia Achterberg", "company": "Acme Labs", '
+        '"billing_address": "12 Oak St, Denver, CO 80203", '
+        '"email": "n@a.example"}'
+    )
+    got = {(s.label, s.text) for s in StructuredDetector().detect(text)}
+    assert ("PERSON", "Nia Achterberg") in got
+    assert ("ORG", "Acme Labs") in got
+    assert ("ADDRESS", "12 Oak St, Denver, CO 80203") in got
+    # email is validator-backed, so it is left to the regex layer, not
+    # whole-valued here (which would redact placeholder hard negatives).
+    assert not any(label == "EMAIL" for label, _ in got)
+
+
+def test_json_detection_ignores_prose():
+    from piiguard.detectors.structured import StructuredDetector
+
+    # Looks like a key/value pair but is prose, not JSON: the guard must hold.
+    text = 'He said "name": "the game" during the talk.'
+    assert StructuredDetector().detect(text) == []
+
+
 # -- verify -------------------------------------------------------------
 
 

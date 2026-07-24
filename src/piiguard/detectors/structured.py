@@ -27,6 +27,8 @@ stdlib only -- this runs in the base tool with no model and no network.
 
 from __future__ import annotations
 
+import re
+
 from ..types import Span
 
 # Header token -> label. Matched against alphanumeric tokens of the header
@@ -56,6 +58,14 @@ MIN_TABLE_ROWS = 3          # header + at least two data rows
 MIN_TABLE_COLUMNS = 2
 TABLE_ROW_FRACTION = 0.6    # of non-empty lines that must share the modal width
 DELIMITERS = (",", "\t")
+
+# A JSON string key/value pair, wherever it sits in the document (including
+# nested objects). The key plays the role a CSV header does: "customer_name":
+# "..." marks a person however the value is written. Position comes straight
+# from the match, so no offset arithmetic is needed.
+JSON_PAIR = re.compile(
+    r'"(?P<key>[\w .\-]+?)"\s*:\s*"(?P<val>(?:[^"\\]|\\.)*)"'
+)
 
 
 def _tokens(header_cell: str) -> set[str]:
@@ -126,16 +136,57 @@ def _trim(line: str, start: int, end: int) -> tuple[int, int]:
 
 
 class StructuredDetector:
-    """Whole-cell redaction of person/org/address columns in a table."""
+    """Whole-value redaction driven by structure: table columns and JSON keys.
+
+    A CSV `name` column and a JSON `"customer_name"` key carry the same signal
+    a free-text model ignores -- this value is a person, however it is written.
+    Both are handled the same way and for the same labels (PERSON, ORG,
+    ADDRESS); validator-backed fields are left to the regex layer so a row's or
+    object's placeholder hard negatives are still rejected, not blindly redacted.
+    """
 
     name = "structured"
 
     def detect(self, text: str) -> list[Span]:
+        # JSON and delimited tables are mutually exclusive shapes. Never run
+        # the comma/tab table pass on JSON: its lines are comma-tailed, which
+        # the table detector otherwise mistakes for a two-column table.
+        if text.lstrip()[:1] in ("{", "["):
+            return self._detect_json(text)
         for delim in DELIMITERS:
-            spans = self._detect_with(text, delim)
-            if spans:
-                return spans
+            table = self._detect_with(text, delim)
+            if table:
+                return table
         return []
+
+    def _detect_json(self, text: str) -> list[Span]:
+        """Emit a span for each JSON string value whose key names PII.
+
+        Only runs on documents that look like JSON, and only for the keyword
+        labels -- the same narrow scope as the table path, for the same reason.
+        """
+        if text.lstrip()[:1] not in ("{", "["):
+            return []
+        spans: list[Span] = []
+        for m in JSON_PAIR.finditer(text):
+            label = _classify(m.group("key"))
+            if label is None:
+                continue
+            start, end = m.start("val"), m.end("val")
+            value = text[start:end]
+            if len(value.strip()) < 2:
+                continue
+            spans.append(
+                Span(
+                    start=start,
+                    end=end,
+                    label=label,
+                    text=value,
+                    score=STRUCT_SCORE,
+                    detector=self.name,
+                )
+            )
+        return spans
 
     def _detect_with(self, text: str, delim: str) -> list[Span]:
         # Line offsets, preserving positions for span coordinates.
