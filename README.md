@@ -10,6 +10,41 @@ So this one never leaves your machine, and CI proves it.
 detect  →  merge  →  policy  →  transform  →  verify  →  output
 ```
 
+<<<<<<< HEAD
+=======
+## Results
+
+Measured on a 31-document labeled corpus (`tests/fixtures/`), layers 1–2:
+
+| metric | value |
+|---|---|
+| **PII characters leaked** | **0.0%** |
+| clean text over-redacted | 5.8% |
+| span-level F1 | 0.945 |
+
+Leak rate is the headline number and the one to argue about. Span F1 is a
+diagnostic: it scores a span that is one character short the same as one that
+missed entirely, and it penalizes over-redaction and under-redaction equally.
+For a scrubber those are not equally bad. What matters is which characters
+survive into the output — so that is what gets measured.
+
+Per-label span scores:
+
+| label | P | R | layer |
+|---|---|---|---|
+| SSN, CREDIT_CARD, IBAN, PHONE_US, DOB, IPV4, EMAIL, SECRET | 1.000 | 1.000 | regex |
+| ADDRESS | 0.962 | 1.000 | regex + NER + structure + join |
+| PERSON | 0.768 | 1.000 | NER + structure |
+| ORG | 0.667 | 1.000 | suffix + NER + structure |
+
+Recall is 1.000 on every label: no labeled character in the corpus survives
+redaction. The remaining error is all over-redaction — mostly spaCy tagging
+document titles ("Form W-2 Wage and Tax Statement") as organizations, which is
+the cheap direction to be wrong in and is left alone deliberately. Chasing that
+precision means suppressing ORG spans, and ORG recall is what the leak rate
+was made of.
+
+>>>>>>> c2da3a2 (Find organizations by legal and sector suffix)
 ## No-egress guarantee
 
 `tests/test_no_egress.py` patches out `socket`, DNS resolution, and
@@ -107,10 +142,45 @@ fumbles (`Nia Achterberg` splits or vanishes) while leaving validator-backed
 fields (email, phone, IP) to layer 1, so a record's placeholder hard negatives
 still get correctly rejected.
 
+<<<<<<< HEAD
 Layer 1 first on purpose: no dependencies, microsecond latency, and real
 validators (Luhn, SSA allocation rules, IBAN mod-97) rather than shape-matching
 alone. That kills most look-alike false positives before any model is involved.
 Layers 2 and 3 have to beat this baseline on the scorecard to earn their place.
+=======
+**Layer 1c — organization suffixes.** spaCy has never seen "Copperline Mutual"
+or "Valley Health Partners", and unlike a person's name there is no morphology
+to guess from — so it returns nothing and the name survives. But English names
+organizations with a closed set of tails: a legal form (Inc, LLC, Holdings) or
+the sector itself (Insurance, Analytics, University). A capitalized run ending
+in one of those is an organization whether or not a model has heard of it, and
+that is a lexical fact needing no model to exploit. This layer closed the last
+of the character leak and, because it is stdlib, took the model-free tool's
+ORG score to 1.000 precision and recall on the corpus. It also *reduced*
+over-redaction: scoring a suffix match as high as a validated regex means it
+wins the merge against spaCy's looser boundary, so "Harborlight Insurance -
+Auto" becomes "Harborlight Insurance".
+
+**Layer 2 — spaCy NER.** People, organizations, places. Presidio was tried
+first and removed: its regex recognizers lose to layer 1 on every shared label,
+and it drops `ORGANIZATION` from its default entity set, so it was a wrapper
+around spaCy that made spaCy worse.
+
+**Join pass.** NER returns addresses in fragments — a street, a city, a ZIP,
+never one span. Redacting the pieces leaves the connective tissue behind, and a
+suite number plus a ZIP is still identifying. `join_adjacent` fuses fragments
+separated only by connective text, never across a line boundary, and pulls in a
+leading street number. The rule is biased toward over-redaction on purpose.
+
+**Layer 3 — local LLM (Ollama).** For context-dependent PII the first layers
+miss (an oddly phrased organization, an obliquely named person), an optional
+pass asks a model running on this machine. It returns verbatim substrings,
+never offsets — piiguard locates them itself and discards anything the model
+did not copy exactly, so a hallucinated span cannot corrupt output. A missing
+or slow server is a no-op, never an error. Its quality is not yet on the
+scorecard (no Ollama in CI); the offset mapping, loopback guard, and
+fail-closed behavior are covered by tests.
+>>>>>>> c2da3a2 (Find organizations by legal and sector suffix)
 
 ## Evaluation
 
@@ -145,8 +215,13 @@ card, and an out-of-range IP. Those are what stop the detector getting lazy.
 >
 > | | leak rate | over-redaction | span F1 |
 > |---|---|---|---|
+<<<<<<< HEAD
 > | layer 1 (regex + structure) | 32.1% | 2.4% | 0.771 |
 > | layer 1 + `--ner` | **1.0%** | 8.0% | 0.921 |
+=======
+> | layer 1 (regex + structure + suffix) | 22.5% | 0.9% | 0.837 |
+> | layer 1 + `--ner` | **0.0%** | 5.8% | 0.945 |
+>>>>>>> c2da3a2 (Find organizations by legal and sector suffix)
 >
 > Span F1 is a diagnostic only: it scores a one-character-short span the same
 > as a total miss and penalizes over- and under-redaction equally, which is
@@ -158,9 +233,26 @@ card, and an out-of-range IP. Those are what stop the detector getting lazy.
 
 ## Not yet handled
 
+<<<<<<< HEAD
 - Images and PDFs (OCR path)
 - Deeply nested / array-of-object JSON (flat JSON objects, CSV, and TSV are handled)
 - Non-US phone, national ID, and address formats
+=======
+- **Organization names without a suffix.** A one-word or coined name with no
+  legal or sector tail ("Brightwave" alone, "Northwind") is reachable by
+  neither layer 1c's lexicon nor spaCy's training. The corpus does not
+  currently contain one, which means the 0.0% leak rate is measured against a
+  corpus that does not test this case — the honest reading is "no known miss",
+  not "cannot miss". This is what layer 3 exists to close, pending validation
+  against a real model.
+- **ORG precision (0.667).** spaCy tags document titles as organizations. Left
+  alone on purpose: the fix is suppression, and suppression trades against the
+  recall the leak rate is made of.
+- Images and PDFs (OCR path).
+- Deeply nested / array-of-object JSON (flat JSON objects, CSV, and TSV are
+  handled).
+- Non-US phone, national ID, and address formats.
+>>>>>>> c2da3a2 (Find organizations by legal and sector suffix)
 
 ## License
 

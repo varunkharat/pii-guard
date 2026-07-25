@@ -85,9 +85,10 @@ def char_set(spans) -> set[int]:
 
 
 def build_pipeline(use_ner: bool, use_llm: bool = False) -> Pipeline:
+    from piiguard.detectors.orgs import OrgSuffixDetector
     from piiguard.detectors.structured import StructuredDetector
 
-    detectors = [RegexDetector(), StructuredDetector()]
+    detectors = [RegexDetector(), StructuredDetector(), OrgSuffixDetector()]
     if use_ner:
         from piiguard.detectors.ner import NerDetector
 

@@ -32,10 +32,10 @@ def _build_detectors(use_ner: bool, use_llm: bool) -> list:
     opt into the heavier layers, imported lazily so their absence costs
     nothing until then.
     """
-    from .detectors import RegexDetector
+    from .detectors import OrgSuffixDetector, RegexDetector
     from .detectors.structured import StructuredDetector
 
-    detectors: list = [RegexDetector(), StructuredDetector()]
+    detectors: list = [RegexDetector(), StructuredDetector(), OrgSuffixDetector()]
     if use_ner:
         try:
             from .detectors.ner import NerDetector
