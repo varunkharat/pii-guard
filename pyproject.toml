@@ -32,3 +32,13 @@ testpaths = ["tests"]
 [tool.ruff]
 line-length = 88
 target-version = "py310"
+
+# Pinned explicitly rather than left to ruff's defaults: an unpinned ruleset
+# means a ruff upgrade can fail CI on code nobody touched.
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I", "UP", "SIM", "RUF"]
+# SIM103 wants the last guard clause collapsed into `return not (...)`. The
+# validators here are deliberately written as a flat list of rejection rules
+# ending in `return True`; collapsing only the final rule breaks that parallel
+# structure and reads worse than the rule it replaces.
+ignore = ["SIM103"]

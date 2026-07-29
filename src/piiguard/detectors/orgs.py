@@ -70,7 +70,10 @@ _STREET_AFTER = r"(?!\s+(?:St|Ave|Blvd|Rd|Ln|Dr|Ct|Way|Pkwy|Hwy)\b\.?)"
 # addressee directly above the company, and `\s+` reached back across the line
 # break to redact "Tobias Renner\nMeridian Freight" as one organization. Same
 # rule the address join follows: a value stays on its line.
-_NAME_WORD = r"[A-Z][\w&'’.-]*"
+# Both apostrophes are deliberate: documents pasted from word processors carry
+# the typographic U+2019 rather than ASCII U+0027, and a possessive company
+# name has to match either form.
+_NAME_WORD = r"[A-Z][\w&'’.-]*"  # noqa: RUF001
 _FUNCTION_WORD = r"(?:of|and|for|the|&)"
 _SEP = r"[ \t]+"
 

@@ -42,8 +42,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
-from piiguard.detectors import RegexDetector  # noqa: E402
-from piiguard.pipeline import Pipeline  # noqa: E402
+from piiguard.detectors import RegexDetector
+from piiguard.pipeline import Pipeline
 
 FIXTURES = Path(__file__).resolve().parents[1] / "tests" / "fixtures"
 
@@ -232,7 +232,7 @@ def main() -> int:
     # -- gates: turn thresholds into a non-zero exit for CI ----------------
     failures: list[str] = []
     if args.fail_on_leak:
-        for label in (l.strip().upper() for l in args.fail_on_leak.split(",")):
+        for label in (name.strip().upper() for name in args.fail_on_leak.split(",")):
             if not label:
                 continue
             fn = counts[label]["fn"]

@@ -28,7 +28,7 @@ class Span:
     def length(self) -> int:
         return self.end - self.start
 
-    def overlaps(self, other: "Span") -> bool:
+    def overlaps(self, other: Span) -> bool:
         return self.start < other.end and other.start < self.end
 
 
