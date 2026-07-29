@@ -1,0 +1,10 @@
+Standup notes, Thursday
+
+- {{PERSON:Tomas Okonjo-Weir}} is out; back Monday.
+- {{ORG:Brightwave}} renewal: contract went to their counsel for redlines.
+  Contact there is {{EMAIL:legal@brightwave.example}}.
+- The {{ORG:Sablewood}} migration slipped a week. Their infra person
+  ({{PHONE_US:737-555-0121}}) wants the cutover window in writing.
+- Reminder: the staging subnet 10.0.4.0 is not customer data; leave it.
+- Invoice 3782 from last sprint is still unpaid -- that is a PO number,
+  not a card, despite what the export column says.

@@ -1,0 +1,12 @@
+Internal Memo - Partnerships, Q3
+
+Met with the team at {{ORG:Northwind}} on Tuesday about the data-sharing
+pilot. Their lead, {{PERSON:Priya Raghunathan}}, can be reached at
+{{EMAIL:priya.r@northwind.example}} or {{PHONE_US:206-555-0188}}.
+
+{{ORG:Copperfox}} passed on the pilot for now; revisit next quarter. Their
+office is at {{ADDRESS:1140 Saltmarsh Ave, Tacoma, WA 98402}} if we end up
+couriering the signed agreement.
+
+Budget line 4111-1111 covers travel for both visits. The kickoff call is
+scheduled for 9/9 at 9:00.

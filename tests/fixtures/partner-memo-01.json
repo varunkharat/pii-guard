@@ -1,0 +1,36 @@
+{
+  "id": "partner-memo-01",
+  "text": "Internal Memo - Partnerships, Q3\n\nMet with the team at Northwind on Tuesday about the data-sharing\npilot. Their lead, Priya Raghunathan, can be reached at\npriya.r@northwind.example or 206-555-0188.\n\nCopperfox passed on the pilot for now; revisit next quarter. Their\noffice is at 1140 Saltmarsh Ave, Tacoma, WA 98402 if we end up\ncouriering the signed agreement.\n\nBudget line 4111-1111 covers travel for both visits. The kickoff call is\nscheduled for 9/9 at 9:00.\n",
+  "spans": [
+    {
+      "start": 55,
+      "end": 64,
+      "label": "ORG"
+    },
+    {
+      "start": 118,
+      "end": 135,
+      "label": "PERSON"
+    },
+    {
+      "start": 155,
+      "end": 180,
+      "label": "EMAIL"
+    },
+    {
+      "start": 184,
+      "end": 196,
+      "label": "PHONE_US"
+    },
+    {
+      "start": 199,
+      "end": 208,
+      "label": "ORG"
+    },
+    {
+      "start": 279,
+      "end": 315,
+      "label": "ADDRESS"
+    }
+  ]
+}
