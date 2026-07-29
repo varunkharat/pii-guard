@@ -21,6 +21,11 @@
       "start": 147,
       "end": 159,
       "label": "IPV4"
+    },
+    {
+      "start": 176,
+      "end": 194,
+      "label": "SECRET"
     }
   ]
 }

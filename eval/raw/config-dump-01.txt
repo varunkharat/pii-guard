@@ -1,5 +1,5 @@
 # staging.env - DO NOT COMMIT
-DATABASE_URL=postgres://svc_app:hunter2@{{IPV4:10.0.4.17}}:5432/appdb
+DATABASE_URL=postgres://svc_app:{{SECRET:hunter2}}@{{IPV4:10.0.4.17}}:5432/appdb
 REDIS_HOST={{IPV4:10.0.4.22}}
 SMTP_HOST=smtp.mailrelay.example
 SMTP_USER={{EMAIL:postmaster@mg.northwind.example}}

@@ -26,4 +26,4 @@ jobs:
       - name: detector scorecard + leak gate
         run: >
           python eval/score.py --no-ner
-          --fail-on-leak SSN,CREDIT_CARD,IBAN,EMAIL,PHONE_US,IPV4,DOB
+          --fail-on-leak SSN,CREDIT_CARD,IBAN,EMAIL,PHONE_US,IPV4,DOB,SECRET

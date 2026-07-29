@@ -12,11 +12,11 @@ the person / organization / address columns.
 
 Deliberately narrow, for two reasons:
 
-  * Only the NER-shaped labels (PERSON, ORG, ADDRESS) get whole-cell
-    treatment. Columns like email, phone and IP already have validated regex
-    detectors that correctly reject a row's placeholder values
-    (noreply@example.invalid, 0000000000). Redacting those columns wholesale
-    would undo that and re-flag the hard negatives.
+  * Only the labels without a value-level validator (PERSON, ORG, ADDRESS,
+    SECRET) get whole-cell treatment. Columns like email, phone and IP already
+    have validated regex detectors that correctly reject a row's placeholder
+    values (noreply@example.invalid, 0000000000). Redacting those columns
+    wholesale would undo that and re-flag the hard negatives.
   * A whole-cell rule redacts a synthetic "Test Account" sitting in a name
     column. That is the right trade for a scrubber: over-redacting one placeholder
     costs a token; leaking a real person's given name costs everything, and
@@ -45,6 +45,14 @@ COLUMN_LABELS: list[tuple[str, frozenset[str]]] = [
     })),
     ("ADDRESS", frozenset({
         "address", "street", "city", "zip", "zipcode", "postal", "state",
+    })),
+    # Secrets have no value-level shape to validate -- an api_key can be any
+    # string -- so the key/header is the only reliable signal, same as a name
+    # column. The prefixed-token regexes catch the recognizable ones; this
+    # catches the arbitrary ones by position.
+    ("SECRET", frozenset({
+        "password", "passwd", "pwd", "secret", "token", "apikey", "key",
+        "credential", "credentials", "auth",
     })),
 ]
 
@@ -141,8 +149,9 @@ class StructuredDetector:
     A CSV `name` column and a JSON `"customer_name"` key carry the same signal
     a free-text model ignores -- this value is a person, however it is written.
     Both are handled the same way and for the same labels (PERSON, ORG,
-    ADDRESS); validator-backed fields are left to the regex layer so a row's or
-    object's placeholder hard negatives are still rejected, not blindly redacted.
+    ADDRESS, SECRET); validator-backed fields are left to the regex layer so a
+    row's or object's placeholder hard negatives are still rejected, not
+    blindly redacted.
     """
 
     name = "structured"

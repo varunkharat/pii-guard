@@ -1,5 +1,5 @@
 2026-03-11T09:14:02Z INFO  auth: login ok user={{EMAIL:m.ferrante@northwind.example}} src={{IPV4:73.140.22.9}}
-2026-03-11T09:14:03Z DEBUG session: token=eyJhbGciOiJIUzI1NiJ9.abc123 ttl=3600
+2026-03-11T09:14:03Z DEBUG session: token={{SECRET:eyJhbGciOiJIUzI1NiJ9.abc123}} ttl=3600
 2026-03-11T09:15:41Z WARN  rate-limit: 429 for {{IPV4:198.51.100.77}} path=/api/v2/export
 2026-03-11T09:16:02Z ERROR billing: card decline last4=1111 ref={{CREDIT_CARD:5555555555554444}}
 2026-03-11T09:16:10Z INFO  upstream: connected {{IPV4:10.0.0.1}}:5432 pool=8

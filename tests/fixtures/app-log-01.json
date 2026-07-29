@@ -13,6 +13,11 @@
       "label": "IPV4"
     },
     {
+      "start": 134,
+      "end": 161,
+      "label": "SECRET"
+    },
+    {
       "start": 218,
       "end": 231,
       "label": "IPV4"

@@ -115,6 +115,36 @@ def ipv4_valid(value: str) -> bool:
     return True
 
 
+# Values that sit where a secret would but are references or placeholders, not
+# credentials. "${DB_PASSWORD}" names a secret; it is not one.
+PLACEHOLDER_SECRETS = {
+    "password", "passwd", "pass", "pwd", "changeme", "change-me", "change_me",
+    "secret", "example", "sample", "dummy", "placeholder", "redacted",
+    "none", "null", "user", "username", "admin", "root", "test",
+}
+
+
+def secret_valid(value: str) -> bool:
+    """Reject placeholder credentials so real ones stand out.
+
+    The prefixed-token branches (sk_live_, ghp_, AKIA...) are self-evident and
+    sail through; this mostly polices the URL-credential branch, where the
+    matched value is whatever sits in the password slot.
+    """
+    v = value.strip()
+    if len(v) < 4:
+        return False
+    if v.lower() in PLACEHOLDER_SECRETS:
+        return False
+    # Interpolation and template syntax: ${DB_PASSWORD}, %PASS%, <password>,
+    # {{password}}. A reference to a secret, not the secret itself.
+    if v[0] in "$%<{":
+        return False
+    if len(set(v)) == 1:  # ******** or xxxxxxxx
+        return False
+    return True
+
+
 US_STATES = {
     "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID",
     "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS",
@@ -181,6 +211,27 @@ PATTERNS: dict[str, tuple[re.Pattern[str], object]] = {
         ),
         None,
     ),
+    # API keys and credentials. Two kinds of signal, neither needing context:
+    # vendor prefixes are deliberately unmistakable (that is what the prefix
+    # is for), and a password inside a connection URL is marked by its
+    # position. The URL branch anchors on `scheme://user:...@` but must redact
+    # only the password, so it names the value group `v` (see detect()).
+    "SECRET": (
+        re.compile(
+            r"\b[srp]k_(?:live|test)_[A-Za-z0-9]{6,}\b"          # Stripe-style
+            r"|\bgh[pousr]_[A-Za-z0-9]{20,}\b"                   # GitHub token
+            r"|\bgithub_pat_[A-Za-z0-9_]{22,}\b"                 # GitHub PAT
+            r"|\b(?:AKIA|ASIA)[0-9A-Z]{16}\b"                    # AWS key id
+            r"|\bxox[baprs]-[A-Za-z0-9-]{10,}\b"                 # Slack token
+            r"|\bAIza[0-9A-Za-z_-]{35}\b"                        # Google key
+            # eyJ is base64 for '{"' -- a JWT-shaped session token, whole or
+            # truncated to two segments as logs often print them.
+            r"|\beyJ[A-Za-z0-9_-]{5,}(?:\.[A-Za-z0-9_-]{2,}){1,2}\b"
+            # postgres://svc_app:PASSWORD@host -- the password slot of a URL.
+            r"|\b[a-z][a-z0-9+.-]*://[^\s:/@]+:(?P<v>[^\s/@]+)@"
+        ),
+        secret_valid,
+    ),
 }
 
 # Labels whose matches are only PII when a cue appears earlier on the same
@@ -214,16 +265,25 @@ class RegexDetector:
         spans: list[Span] = []
         for label in self.labels:
             pattern, validator = PATTERNS[label]
+            has_value_group = "v" in pattern.groupindex
             for match in pattern.finditer(text):
-                value = match.group(0)
+                # A pattern may anchor on context it should not redact -- the
+                # URL-credential branch matches `scheme://user:pass@` but only
+                # the password is the secret. Naming a group `v` narrows the
+                # span to that group when it participated in the match.
+                if has_value_group and match.group("v") is not None:
+                    start, end = match.span("v")
+                else:
+                    start, end = match.span()
+                value = text[start:end]
                 if validator is not None and not validator(value):
                     continue
-                if not self._has_context(text, label, match.start()):
+                if not self._has_context(text, label, start):
                     continue
                 spans.append(
                     Span(
-                        start=match.start(),
-                        end=match.end(),
+                        start=start,
+                        end=end,
                         label=label,
                         text=value,
                         score=1.0,
