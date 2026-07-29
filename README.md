@@ -10,17 +10,15 @@ So this one never leaves your machine, and CI proves it.
 detect  →  merge  →  policy  →  transform  →  verify  →  output
 ```
 
-<<<<<<< HEAD
-=======
 ## Results
 
-Measured on a 31-document labeled corpus (`tests/fixtures/`), layers 1–2:
+Measured on a 33-document labeled corpus (`tests/fixtures/`), layers 1–2:
 
 | metric | value |
 |---|---|
-| **PII characters leaked** | **0.0%** |
-| clean text over-redacted | 5.8% |
-| span-level F1 | 0.945 |
+| **PII characters leaked** | **0.2%** |
+| clean text over-redacted | 7.1% |
+| span-level F1 | 0.931 |
 
 Leak rate is the headline number and the one to argue about. Span F1 is a
 diagnostic: it scores a span that is one character short the same as one that
@@ -32,19 +30,26 @@ Per-label span scores:
 
 | label | P | R | layer |
 |---|---|---|---|
-| SSN, CREDIT_CARD, IBAN, PHONE_US, DOB, IPV4, EMAIL, SECRET | 1.000 | 1.000 | regex |
-| ADDRESS | 0.962 | 1.000 | regex + NER + structure + join |
-| PERSON | 0.768 | 1.000 | NER + structure |
-| ORG | 0.667 | 1.000 | suffix + NER + structure |
+| SSN, CREDIT_CARD, IBAN, PHONE_US, DOB, IPV4 | 1.000 | 1.000 | regex |
+| SECRET | 1.000 | 1.000 | regex + structure |
+| EMAIL | 0.977 | 1.000 | regex |
+| ADDRESS | 0.929 | 1.000 | regex + NER + structure + join |
+| PERSON | 0.750 | 1.000 | NER + structure |
+| ORG | 0.658 | 0.893 | suffix + NER + structure |
 
-Recall is 1.000 on every label: no labeled character in the corpus survives
-redaction. The remaining error is all over-redaction — mostly spaCy tagging
-document titles ("Form W-2 Wage and Tax Statement") as organizations, which is
-the cheap direction to be wrong in and is left alone deliberately. Chasing that
+The leaked characters are one organization name: "Brightwave", a coined
+one-word name with no legal or sector suffix, in a terse bullet list that
+gives spaCy no context. That fixture was added deliberately — the corpus
+previously contained no unsuffixed org, so the then-0.0% leak rate was
+measured against a corpus that never tested the known hard case. 0.2% against
+a corpus that does is the honest number, and closing it is layer 3's job.
+
+The rest of the error is over-redaction — mostly spaCy tagging document
+titles ("Form W-2 Wage and Tax Statement") as organizations, which is the
+cheap direction to be wrong in and is left alone deliberately. Chasing that
 precision means suppressing ORG spans, and ORG recall is what the leak rate
-was made of.
+is made of.
 
->>>>>>> c2da3a2 (Find organizations by legal and sector suffix)
 ## No-egress guarantee
 
 `tests/test_no_egress.py` patches out `socket`, DNS resolution, and
@@ -121,8 +126,9 @@ like everything here, it never leaves your machine.
 
 | layer | status | what it catches |
 |---|---|---|
-| 1. regex + validators | ✅ built | SSN, credit card, phone, email, IPv4, IBAN |
+| 1. regex + validators | ✅ built | SSN, credit card, phone, email, IPv4, IBAN, API keys / URL credentials |
 | 1b. structure | ✅ built | whole-value PII in CSV/TSV columns and JSON keys |
+| 1c. org suffixes | ✅ built | organizations by legal or sector tail |
 | 2. NER (spaCy) | ✅ built, opt-in `--ner` | names, orgs, locations |
 | 3. local LLM (Ollama) | ✅ built, opt-in `--llm` | context-dependent PII the first two miss |
 
@@ -135,28 +141,39 @@ Its quality is not yet on the scorecard below (no Ollama in CI); the offset
 mapping, loopback guard, and fail-closed behavior are covered by tests.
 
 The structure layer is also stdlib-only. In a delimited table it reads the
-header and redacts entire cells of the person/org/address columns; in JSON it
-does the same for values whose key names a person, org, or address
-(`"customer_name": "..."`). Either way it catches names a per-cell model
-fumbles (`Nia Achterberg` splits or vanishes) while leaving validator-backed
-fields (email, phone, IP) to layer 1, so a record's placeholder hard negatives
-still get correctly rejected.
+header and redacts entire cells of the person/org/address/secret columns; in
+JSON it does the same for values whose key names one of those
+(`"customer_name": "..."`, `"api_key": "..."`). Either way it catches what a
+per-value pass cannot: names a model fumbles (`Nia Achterberg` splits or
+vanishes) and secrets with no recognizable prefix — an `api_key` can be any
+string, so the key is the only reliable signal. Validator-backed fields
+(email, phone, IP) are left to layer 1, so a record's placeholder hard
+negatives still get correctly rejected.
 
-<<<<<<< HEAD
-Layer 1 first on purpose: no dependencies, microsecond latency, and real
+**Layer 1 first on purpose:** no dependencies, microsecond latency, and real
 validators (Luhn, SSA allocation rules, IBAN mod-97) rather than shape-matching
 alone. That kills most look-alike false positives before any model is involved.
 Layers 2 and 3 have to beat this baseline on the scorecard to earn their place.
-=======
+
+**Secrets.** API keys and credentials ride the same layer on two signals.
+Vendor prefixes are unmistakable by design — that is what the prefix is for —
+so `sk_live_…`, `ghp_…`, `AKIA…`, `xoxb-…`, and JWT-shaped `eyJ…` tokens need
+no context. A password inside a connection URL is marked by its position:
+`postgres://svc_app:hunter2@db` redacts exactly the password slot, never the
+username or host. Placeholders are rejected as hard negatives — `${DB_PASSWORD}`
+names a secret, `********` used to be one; neither is one now.
+
 **Layer 1c — organization suffixes.** spaCy has never seen "Copperline Mutual"
 or "Valley Health Partners", and unlike a person's name there is no morphology
 to guess from — so it returns nothing and the name survives. But English names
 organizations with a closed set of tails: a legal form (Inc, LLC, Holdings) or
 the sector itself (Insurance, Analytics, University). A capitalized run ending
 in one of those is an organization whether or not a model has heard of it, and
-that is a lexical fact needing no model to exploit. This layer closed the last
-of the character leak and, because it is stdlib, took the model-free tool's
-ORG score to 1.000 precision and recall on the corpus. It also *reduced*
+that is a lexical fact needing no model to exploit. On the corpus the
+model-free tool's ORG precision is 1.000 — every suffix match is a real
+organization — and its recall is 0.857, the misses being exactly the coined
+suffix-less names ("Brightwave", "Copperfox") the lexicon cannot reach. It
+also *reduced*
 over-redaction: scoring a suffix match as high as a validated regex means it
 wins the merge against spaCy's looser boundary, so "Harborlight Insurance -
 Auto" becomes "Harborlight Insurance".
@@ -180,7 +197,6 @@ did not copy exactly, so a hallucinated span cannot corrupt output. A missing
 or slow server is a no-op, never an error. Its quality is not yet on the
 scorecard (no Ollama in CI); the offset mapping, loopback guard, and
 fail-closed behavior are covered by tests.
->>>>>>> c2da3a2 (Find organizations by legal and sector suffix)
 
 ## Evaluation
 
@@ -190,14 +206,14 @@ python eval/score.py --partial  # count overlap as a hit
 python eval/score.py --llm      # include layer 3 (needs a local Ollama server)
 
 # Gates (exit 2 on breach) — CI enforces the first one:
-python eval/score.py --no-ner --fail-on-leak SSN,CREDIT_CARD,IBAN,EMAIL,PHONE_US,IPV4,DOB
+python eval/score.py --no-ner --fail-on-leak SSN,CREDIT_CARD,IBAN,EMAIL,PHONE_US,IPV4,DOB,SECRET
 python eval/score.py --max-leak-rate 5
 ```
 
 The validator-backed labels are pure layer 1, so their leak rate is gated in
-CI: if an SSN, card, IBAN, email, phone, IP, or DOB ever survives redaction,
-the build fails. Like the no-egress test, this makes a core promise a property
-under test rather than a claim.
+CI: if an SSN, card, IBAN, email, phone, IP, DOB, or secret ever survives
+redaction, the build fails. Like the no-egress test, this makes a core promise
+a property under test rather than a claim.
 
 Authoring fixtures — never hand-count offsets:
 
@@ -210,50 +226,47 @@ Every fixture should include **hard negatives**: values that look like PII and
 aren't. The seed corpus has an invalid-area SSN, a bare number that resembles a
 card, and an out-of-range IP. Those are what stop the detector getting lazy.
 
-> Corpus, 30 documents. The number that matters is the **character-level
+> Corpus, 33 documents. The number that matters is the **character-level
 > leak rate** — the fraction of labeled PII characters surviving redaction:
 >
 > | | leak rate | over-redaction | span F1 |
 > |---|---|---|---|
-<<<<<<< HEAD
-> | layer 1 (regex + structure) | 32.1% | 2.4% | 0.771 |
-> | layer 1 + `--ner` | **1.0%** | 8.0% | 0.921 |
-=======
-> | layer 1 (regex + structure + suffix) | 22.5% | 0.9% | 0.837 |
-> | layer 1 + `--ner` | **0.0%** | 5.8% | 0.945 |
->>>>>>> c2da3a2 (Find organizations by legal and sector suffix)
+> | layer 1 (regex + structure + suffix) | 23.8% | 2.0% | 0.823 |
+> | layer 1 + `--ner` | **0.2%** | 7.1% | 0.931 |
 >
 > Span F1 is a diagnostic only: it scores a one-character-short span the same
 > as a total miss and penalizes over- and under-redaction equally, which is
-> wrong for a scrubber. The residual leak is almost entirely organization
-> names spaCy misses (an insurer, a clinic); the over-redaction is mostly
-> spaCy over-tagging document titles, which is cheap by design. Closing the
-> org gap is what layer 3 is for. At 30 documents this is the low end of a
-> stable range.
+> wrong for a scrubber. The residual layer-1 leak is almost entirely person
+> names and address fragments, which is what the NER layer exists to close.
+> The over-redaction is mostly spaCy over-tagging document titles, which is
+> cheap by design. At 33 documents this is the low end of a stable range.
 
 ## Not yet handled
 
-<<<<<<< HEAD
-- Images and PDFs (OCR path)
-- Deeply nested / array-of-object JSON (flat JSON objects, CSV, and TSV are handled)
-- Non-US phone, national ID, and address formats
-=======
 - **Organization names without a suffix.** A one-word or coined name with no
   legal or sector tail ("Brightwave" alone, "Northwind") is reachable by
-  neither layer 1c's lexicon nor spaCy's training. The corpus does not
-  currently contain one, which means the 0.0% leak rate is measured against a
-  corpus that does not test this case — the honest reading is "no known miss",
-  not "cannot miss". This is what layer 3 exists to close, pending validation
-  against a real model.
-- **ORG precision (0.667).** spaCy tags document titles as organizations. Left
+  neither layer 1c's lexicon nor spaCy's training — unless prose context
+  rescues it ("the team at Northwind" is caught; a terse "Brightwave renewal:"
+  bullet is not). The corpus now contains both cases, and the miss is the
+  entirety of the 0.2% leak. This is what layer 3 exists to close, pending
+  validation against a real model.
+- **Layer 3 quality is unmeasured.** The plumbing is tested (loopback guard,
+  offset mapping, fail-closed), but `eval/score.py --llm` has never been run
+  against a live model, so "layer 3 closes the org gap" is a design intent,
+  not a result.
+- **ORG precision (0.658).** spaCy tags document titles as organizations. Left
   alone on purpose: the fix is suppression, and suppression trades against the
   recall the leak rate is made of.
+- **Unprefixed secrets in prose.** The SECRET layer needs a vendor prefix, a
+  URL password slot, or a secret-named key/column. A bare hex blob in a
+  sentence ("the key is a3f9...") and PEM private-key blocks are not caught;
+  a generic entropy detector is the known fix and brings a real
+  false-positive cost (git SHAs, request IDs).
 - Images and PDFs (OCR path).
 - Deeply nested / array-of-object JSON (flat JSON objects, CSV, and TSV are
   handled).
 - Non-US phone, national ID, and address formats.
->>>>>>> c2da3a2 (Find organizations by legal and sector suffix)
 
 ## License
 
-Apache-2.0
+Apache-2.0 — see [LICENSE](LICENSE).
