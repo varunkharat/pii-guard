@@ -37,6 +37,17 @@ def test_iban_checksum():
     assert not iban_valid("GB82WEST12345698765433")
 
 
+def test_phone_in_parentheses_keeps_balanced_span():
+    # "(737-555-0121)" is a phone written inside parens, not a paren area
+    # code. The span must start at the first digit, not absorb the "(".
+    from piiguard.detectors import RegexDetector
+
+    spans = RegexDetector().detect("call them ((737-555-0121) tomorrow")
+    phones = [s for s in spans if s.label == "PHONE_US"]
+    assert len(phones) == 1
+    assert phones[0].text == "737-555-0121"
+
+
 # -- merge --------------------------------------------------------------
 
 

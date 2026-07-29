@@ -153,8 +153,11 @@ PATTERNS: dict[str, tuple[re.Pattern[str], object]] = {
         luhn_valid,
     ),
     "PHONE_US": (
+        # The area-code parens come as a pair or not at all. Independently
+        # optional parens (`\(?...\)?`) let a phone written inside parentheses
+        # -- "(737-555-0121)" -- absorb the opening paren into the span.
         re.compile(
-            r"(?<!\d)(?:\+?1[ .-]?)?\(?\d{3}\)?[ .-]?\d{3}[ .-]?\d{4}(?!\d)"
+            r"(?<!\d)(?:\+?1[ .-]?)?(?:\(\d{3}\)|\d{3})[ .-]?\d{3}[ .-]?\d{4}(?!\d)"
         ),
         phone_valid,
     ),
